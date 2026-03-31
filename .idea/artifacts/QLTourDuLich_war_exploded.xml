@@ -1,0 +1,22 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="QLTourDuLich:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/QLTourDuLich_war_exploded</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="commons-codec-1.15" />
+          <element id="library" level="project" name="commons-compress-1.21" />
+          <element id="library" level="project" name="javax.servlet-api-4.0.1" />
+          <element id="library" level="project" name="jcalendar-1.4" />
+          <element id="library" level="project" name="jstl-1.2" />
+          <element id="library" level="project" name="mysql-connector-j-9.6.0" />
+          <element id="library" level="project" name="poi-javadoc-5.2.3" />
+        </element>
+        <element id="directory" name="classes">
+          <element id="module-output" name="QLTourDuLich" />
+        </element>
+      </element>
+      <element id="dir-copy" path="$PROJECT_DIR$/webapp" />
+    </root>
+  </artifact>
+</component>
