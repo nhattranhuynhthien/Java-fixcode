@@ -10,8 +10,8 @@ public class KMTourDAO {
         ArrayList<KMTourDTO> list = new ArrayList<>();
 
         String sql = "SELECT * FROM CTrinhKM km " +
-                     "JOIN KMTour_CHITIET ct ON km.maKM = ct.maKM " +
-                     "WHERE km.hinhThucKM = 0";
+                "JOIN ctietkmtour ct ON km.maKM = ct.maKM " +
+                "WHERE km.hinhThucKM = 0";
 
         try (Connection conn = _MyConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -65,8 +65,8 @@ public class KMTourDAO {
         KMTourDTO km = null;
 
         String sql = "SELECT * FROM CTrinhKM km " +
-                     "JOIN KMTour_CHITIET ct ON km.maKM = ct.maKM " +
-                     "WHERE km.maKM=?";
+                "JOIN ctietkmtour ct ON km.maKM = ct.maKM " +
+                "WHERE km.maKM=?";
 
         try (Connection conn = _MyConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -124,7 +124,7 @@ public class KMTourDAO {
 
             conn.setAutoCommit(false);
 
-            String sql2 = "INSERT INTO kmtour_chitiet VALUES (?,?)";
+            String sql2 = "INSERT INTO ctietkmtour VALUES (?,?)";
 
             for (String maTour : kmTour.getDsMaTour()) {
 
@@ -153,7 +153,7 @@ public class KMTourDAO {
             conn.setAutoCommit(false);
 
             PreparedStatement ps1 =
-                    conn.prepareStatement("DELETE FROM kmtour_chitiet WHERE maKM=?");
+                    conn.prepareStatement("DELETE FROM ctietkmtour WHERE maKM=?");
 
             ps1.setString(1, maKM);
             ps1.executeUpdate();
@@ -199,12 +199,12 @@ public class KMTourDAO {
             ps.executeUpdate();
 
             PreparedStatement ps2 =
-                    conn.prepareStatement("DELETE FROM kmtour_chitiet WHERE maKM=?");
+                    conn.prepareStatement("DELETE FROM ctietkmtour WHERE maKM=?");
 
             ps2.setString(1, kmTour.getMaKM());
             ps2.executeUpdate();
 
-            String sql3 = "INSERT INTO kmtour_chitiet VALUES (?,?)";
+            String sql3 = "INSERT INTO ctietkmtour VALUES (?,?)";
 
             for (String maTour : kmTour.getDsMaTour()) {
 

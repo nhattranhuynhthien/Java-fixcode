@@ -8,8 +8,8 @@ public class KMHDDAO {
     public ArrayList<KMHDDTO> getDsKMHD() {
         ArrayList<KMHDDTO> list = new ArrayList<>();
         String sql="SELECT * FROM CTrinhKM km " +
-                     "JOIN KMHD_CHITIET hd ON km.maKM = hd.maKM " +
-                     "WHERE km.hinhThucKM = 1";
+                "JOIN ctietkmhd hd ON km.maKM = hd.maKM " +
+                "WHERE km.hinhThucKM = 1";
         try (Connection conn = _MyConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -38,8 +38,8 @@ public class KMHDDAO {
 
     public KMHDDTO timKMHD(String maKM) {
         String sql = "SELECT * FROM CTrinhKM km " +
-                     "JOIN KMHD_CHITIET hd ON km.maKM = hd.maKM " +
-                     "WHERE km.maKM = ?";
+                "JOIN ctietkmhd hd ON km.maKM = hd.maKM " +
+                "WHERE km.maKM = ?";
         try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, maKM);
@@ -58,7 +58,7 @@ public class KMHDDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace();    
+            e.printStackTrace();
         }
         return null;
     }
@@ -78,8 +78,8 @@ public class KMHDDAO {
 
     public ArrayList<KMHDDTO> getDsKMHDTheoNgay(String ngay) {
         String sql = "SELECT * FROM CTrinhKM km " +
-                     "JOIN KMHD_CHITIET hd ON km.maKM = hd.maKM " +
-                     "WHERE km.ngayBD <= ? AND km.ngayKT >= ?";
+                "JOIN ctietkmhd hd ON km.maKM = hd.maKM " +
+                "WHERE km.ngayBD <= ? AND km.ngayKT >= ?";
         ArrayList<KMHDDTO> list = new ArrayList<>();
         try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -109,12 +109,12 @@ public class KMHDDAO {
 
 
     public boolean themKMHD(KMHDDTO kmhd) {
-        String sqlHD = "INSERT INTO KMHD_CHITIET VALUES (?, ?)";
-       try (Connection conn = _MyConnection.getConnection()) {
+        String sqlHD = "INSERT INTO ctietkmhd VALUES (?, ?)";
+        try (Connection conn = _MyConnection.getConnection()) {
 
             conn.setAutoCommit(false);
 
-            
+
             try (PreparedStatement p2 = conn.prepareStatement(sqlHD)) {
                 p2.setString(1, kmhd.getMaKM());
                 p2.setFloat(2, kmhd.getTongTienApDung());
@@ -145,8 +145,8 @@ public class KMHDDAO {
     }
 
     public boolean suaKMHD(KMHDDTO kmhd) {
-    String sqlKM = "UPDATE CTrinhKM SET tenKM=?, ngayBD=?, ngayKT=?, chietKhau=?, ghiChu=? WHERE maKM=?";
-        String sqlHD = "UPDATE KMHD_CHITIET SET tongTienApDung=? WHERE maKM=?";
+        String sqlKM = "UPDATE CTrinhKM SET tenKM=?, ngayBD=?, ngayKT=?, chietKhau=?, ghiChu=? WHERE maKM=?";
+        String sqlHD = "UPDATE ctietkmhd SET tongTienApDung=? WHERE maKM=?";
 
         try (Connection conn = _MyConnection.getConnection()) {
 

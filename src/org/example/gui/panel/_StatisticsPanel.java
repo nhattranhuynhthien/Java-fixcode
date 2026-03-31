@@ -11,8 +11,6 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import static java.sql.Date.valueOf;
 
@@ -139,16 +137,19 @@ public class _StatisticsPanel extends JPanel {
             cardsPanel.add(createStatCard("Tổng thu (Phải tính)", formatter.format(totalIncome), new Color(76, 175, 80)));
             cardsPanel.add(createStatCard("Lợi nhuận", formatter.format(profit), new Color(3, 169, 244)));
 
-            // Logic Lấy Khách Hàng Có Doanh Thu Cao Nhất
-            HashMap<String, Float> tkKH = hoaDonBus.getThongKeDoanhThuTheoKhachHang(fromDate, toDate);
+            // ====== LOGIC MỚI: Lấy Khách Hàng Có Doanh Thu Cao Nhất (Dùng ArrayList) ======
+            ArrayList<Object[]> tkKH = hoaDonBus.getThongKeDoanhThuTheoKhachHang(fromDate, toDate);
             String bestKH = "Chưa có";
             float maxDoanhThuKH = 0;
-            for(Map.Entry<String, Float> entry : tkKH.entrySet()) {
-                if(entry.getValue() > maxDoanhThuKH) {
-                    maxDoanhThuKH = entry.getValue();
-                    bestKH = entry.getKey();
+
+            for(Object[] row : tkKH) {
+                float doanhThu = (float) row[1];
+                if(doanhThu > maxDoanhThuKH) {
+                    maxDoanhThuKH = doanhThu;
+                    bestKH = row[0].toString();
                 }
             }
+
             cardsPanel.add(createStatCard("KH Đặt Nhiều Nhất", bestKH + " ("+formatter.format(maxDoanhThuKH)+")", new Color(255, 152, 0)));
 
         } catch (Exception e) {

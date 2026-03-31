@@ -89,12 +89,16 @@ public class _KeHoachTourDialog extends JDialog {
         jlbTongChi.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbTongChi);
         txtTongChi = new JTextField();
+        txtTongChi.setText("0"); // Đặt mặc định là 0
+        txtTongChi.setEditable(false); // Khóa không cho sửa
         formPanel.add(txtTongChi);
 
         jlbTongThu = new JLabel("Tổng thu");
         jlbTongThu.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbTongThu);
         txtTongThu = new JTextField();
+        txtTongThu.setText("0"); // Đặt mặc định là 0
+        txtTongThu.setEditable(false); // Khóa không cho sửa
         formPanel.add(txtTongThu);
 
         jlbMaTour = new JLabel("Mã tour");

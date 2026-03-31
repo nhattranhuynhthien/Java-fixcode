@@ -1,6 +1,5 @@
 package org.example.dao;
 import org.example.dto.HoaDonDTO;
-import org.example.helper.DateHelper;
 
 import java.sql.*;
 import java.util.*;
@@ -99,6 +98,7 @@ public class HoaDonDAO {
         String sqlct = "Delete from cthoadon where mahd=?";
         String sql="Delete from hoadon where mahd=?";
 
+        // Tự động hoàn lại số vé bị hủy vào Kế hoạch tour
         String sqlHoanVe = "UPDATE kehoachtour SET tongsove = tongsove + ? WHERE makhtour=?";
 
         Connection connection=null;
@@ -320,18 +320,54 @@ public class HoaDonDAO {
 
     public Float getTongThutheoKehoachtour(String makhtour){
         Float tong=0.0f;
-        String sql="Select k.MaKHTour, sum(h.tongtien) as tongtien from hoadon h join kehoachtour k on k.makhtour=h.makhtour where k.MaKHTour=? group by makhtour";
+        String sql="Select sum(tongtien) as tongtien from hoadon where makhtour=?";
 
         try(Connection conn=_MyConnection.getConnection();
-        PreparedStatement ps=conn.prepareStatement(sql)){
+            PreparedStatement ps=conn.prepareStatement(sql)){
             ps.setString(1,makhtour);
             ResultSet rs=ps.executeQuery();
             if(rs.next()){
-                rs.getFloat("tongtien");
+                tong = rs.getFloat("tongtien");
             }
         }catch (SQLException e){
             e.printStackTrace();
         }
         return tong;
+    }
+
+    public boolean dongBoDoanhThuKeHoachTour(String makhtour) {
+        String sql = "UPDATE kehoachtour SET tongthu = COALESCE((SELECT SUM(tongtien) FROM hoadon WHERE makhtour = ?), 0) WHERE makhtour = ?";
+        try(Connection conn=_MyConnection.getConnection();
+            PreparedStatement ps=conn.prepareStatement(sql)){
+            ps.setString(1, makhtour);
+            ps.setString(2, makhtour);
+            return ps.executeUpdate() > 0;
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // ====== HÀM MỚI: Truy vấn tối ưu bằng GROUP BY ======
+    public ArrayList<Object[]> thongKeDoanhThuKH(LocalDate tuNgay, LocalDate denNgay) {
+        ArrayList<Object[]> list = new ArrayList<>();
+        String sql = "SELECT makhangdat, SUM(tongtien) as tongdoanhthu FROM hoadon WHERE ngay BETWEEN ? AND ? GROUP BY makhangdat";
+
+        try (Connection conn = _MyConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setDate(1, java.sql.Date.valueOf(tuNgay));
+            ps.setDate(2, java.sql.Date.valueOf(denNgay));
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String maKH = rs.getString("makhangdat");
+                float tongTien = rs.getFloat("tongdoanhthu");
+                list.add(new Object[]{maKH, tongTien});
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 }

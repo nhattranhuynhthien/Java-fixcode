@@ -6,53 +6,84 @@ import org.example.dto._CTietKHTourDTO;
 import java.util.ArrayList;
 
 public class _CTietKHTourBUS {
-    private ArrayList<_CTietKHTourDTO> lsCTietKHTours;
+    public static ArrayList<_CTietKHTourDTO> lsCTietKHTours; // Chuyển thành static
     private _CTietKHTourDAO cTietKHTourDAO;
 
-    //constructor
     public _CTietKHTourBUS(){
         cTietKHTourDAO = new _CTietKHTourDAO();
-        lsCTietKHTours = new ArrayList<>();
+        if(lsCTietKHTours == null) {
+            lsCTietKHTours = cTietKHTourDAO.getAllCTietKHTours();
+        }
+    }
+
+    public void docDs() {
+        lsCTietKHTours = cTietKHTourDAO.getAllCTietKHTours();
     }
 
     public ArrayList<_CTietKHTourDTO> getAllCTietKHTours(){
-        lsCTietKHTours = cTietKHTourDAO.getAllCTietKHTours();
+        if(lsCTietKHTours == null) {
+            lsCTietKHTours = cTietKHTourDAO.getAllCTietKHTours();
+        }
         return lsCTietKHTours;
     }
+
     public boolean addCTietKHTour(_CTietKHTourDTO t){
         if(t == null) return false;
 
         boolean success = cTietKHTourDAO.addCTietKHTour(t);
-        if(success) lsCTietKHTours.add(t);
+        if(success) {
+            lsCTietKHTours.add(t);
+
+            // ====== ĐỒNG BỘ: Ép load lại Kế Hoạch Tour từ DB để nhận Tổng Chi mới ======
+            new _KeHoachTourBUS().docDs();
+        }
 
         return success;
     }
 
     public boolean editCTietKHTour(_CTietKHTourDTO t){
-        return cTietKHTourDAO.editCTietKHTour(t);
+        boolean success = cTietKHTourDAO.editCTietKHTour(t);
+        if(success) {
+            for (int i = 0; i < lsCTietKHTours.size(); i++) {
+                if (lsCTietKHTours.get(i).getMaCTietKHTour().equals(t.getMaCTietKHTour())) {
+                    lsCTietKHTours.set(i, t);
+                    break;
+                }
+            }
+            // ====== ĐỒNG BỘ TỔNG CHI ======
+            new _KeHoachTourBUS().docDs();
+        }
+        return success;
     }
 
     public boolean removeCTietKHTour(String maCTietKHTour){
-        return cTietKHTourDAO.removeCTietKHTour(maCTietKHTour);
+        boolean success = cTietKHTourDAO.removeCTietKHTour(maCTietKHTour);
+        if(success) {
+            lsCTietKHTours.removeIf(ct -> ct.getMaCTietKHTour().equals(maCTietKHTour));
+
+            // ====== ĐỒNG BỘ TỔNG CHI ======
+            new _KeHoachTourBUS().docDs();
+        }
+        return success;
     }
 
     public _CTietKHTourDTO getCTietKHTourById(String maCTietKHTour){
-        _CTietKHTourDTO result = null;
+        if(lsCTietKHTours == null) getAllCTietKHTours();
+
         for (_CTietKHTourDTO ct : lsCTietKHTours){
-            if(ct.getMaKHTour().trim().equalsIgnoreCase(maCTietKHTour)) {
-                result = ct;
-                break;
+            // FIX LỖI NGHIÊM TRỌNG: Dùng getMaCTietKHTour() thay vì getMaKHTour()
+            if(ct.getMaCTietKHTour().trim().equalsIgnoreCase(maCTietKHTour)) {
+                return ct;
             }
         }
-        return result;
+        return null;
     }
 
-    // get CTietKeHTour equal with maKHTour
     public ArrayList<_CTietKHTourDTO> getLsCTietKHToursById(String maKHTour){
-        ArrayList<_CTietKHTourDTO> result = new ArrayList<>(); // result CTietKHTours
-        ArrayList<_CTietKHTourDTO> list = getAllCTietKHTours(); // list CTietKHTours
+        if(lsCTietKHTours == null) getAllCTietKHTours();
+        ArrayList<_CTietKHTourDTO> result = new ArrayList<>();
 
-        for (_CTietKHTourDTO ct : list){
+        for (_CTietKHTourDTO ct : lsCTietKHTours){
             if(ct.getMaKHTour().trim().equalsIgnoreCase(maKHTour)) {
                 result.add(ct);
             }
@@ -61,10 +92,11 @@ public class _CTietKHTourBUS {
     }
 
     public boolean existedCTietKHTourWithID(String maCTKHTour){
-        ArrayList<_CTietKHTourDTO> list = getAllCTietKHTours(); // list CTietKHTours
+        if(lsCTietKHTours == null) getAllCTietKHTours();
 
-        for (_CTietKHTourDTO ct : list){
-            if(ct.getMaKHTour().trim().equalsIgnoreCase(maCTKHTour))
+        for (_CTietKHTourDTO ct : lsCTietKHTours){
+            // FIX LỖI NGHIÊM TRỌNG: Dùng getMaCTietKHTour() thay vì getMaKHTour()
+            if(ct.getMaCTietKHTour().trim().equalsIgnoreCase(maCTKHTour))
                 return true;
         }
         return false;

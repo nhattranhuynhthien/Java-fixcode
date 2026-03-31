@@ -7,21 +7,29 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class _KeHoachTourBUS {
-    private ArrayList<_KeHoachTourDTO> lsKeHoachTour;
-    _KeHoachTourDAO keHoachTourDAO;
+    public static ArrayList<_KeHoachTourDTO> lsKeHoachTour;
+    private _KeHoachTourDAO keHoachTourDAO;
 
     public _KeHoachTourBUS(){
-        lsKeHoachTour = new ArrayList<>();
         keHoachTourDAO = new _KeHoachTourDAO();
+        if(lsKeHoachTour == null) {
+            lsKeHoachTour = keHoachTourDAO.getAllKeHoachTours();
+        }
+    }
+
+    public void docDs() {
+        lsKeHoachTour = keHoachTourDAO.getAllKeHoachTours();
     }
 
     public ArrayList<_KeHoachTourDTO> getAllKeHoachTours(){
-        lsKeHoachTour = keHoachTourDAO.getAllKeHoachTours();
+        if(lsKeHoachTour == null) {
+            lsKeHoachTour = keHoachTourDAO.getAllKeHoachTours();
+        }
         return lsKeHoachTour;
     }
 
     public ArrayList<_KeHoachTourDTO> getAllKeHoachToursByID(String maTour){
-        lsKeHoachTour = keHoachTourDAO.getAllKeHoachTours();
+        if (lsKeHoachTour == null) getAllKeHoachTours();
         ArrayList<_KeHoachTourDTO> lsKeHoachToursID = new ArrayList<>();
 
         for(_KeHoachTourDTO kt : lsKeHoachTour){
@@ -52,48 +60,59 @@ public class _KeHoachTourBUS {
 
     public String validateKeHoachTour(_KeHoachTourDTO t){
         if(t == null) return "Dữ liệu không hợp lệ";
-
-        if(t.getNgayKhoiHanh() == null || t.getNgayKetThuc() == null)
-            return "Ngày không được để trống";
-
-        if(t.getNgayKetThuc().isBefore(t.getNgayKhoiHanh()))
-            return "Ngày kết thúc phải sau ngày khởi hành";
-
-        if(t.getTongChi() < 0)
-            return "Tổng chi không hợp lệ";
-
-        if(t.getTongThu() < 0)
-            return "Tổng thu không hợp lệ";
-
-        if(t.getTongSoVe() < 0)
-            return "Tổng số vé không hợp lệ";
-
+        if(t.getNgayKhoiHanh() == null || t.getNgayKetThuc() == null) return "Ngày không được để trống";
+        if(t.getNgayKetThuc().isBefore(t.getNgayKhoiHanh())) return "Ngày kết thúc phải sau ngày khởi hành";
+        if(t.getTongChi() < 0) return "Tổng chi không hợp lệ";
+        if(t.getTongThu() < 0) return "Tổng thu không hợp lệ";
+        if(t.getTongSoVe() < 0) return "Tổng số vé không hợp lệ";
         return null;
     }
 
     public boolean editKeHoachTour(_KeHoachTourDTO t){
-        return keHoachTourDAO.editKeHoachTour(t);
+        boolean success = keHoachTourDAO.editKeHoachTour(t);
+        if(success) {
+            for (int i = 0; i < lsKeHoachTour.size(); i++) {
+                if (lsKeHoachTour.get(i).getMaKHTour().equals(t.getMaKHTour())) {
+                    lsKeHoachTour.set(i, t);
+                    break;
+                }
+            }
+        }
+        return success;
     }
 
-    public boolean removeKeHoachTour(String matour){
-        boolean success = keHoachTourDAO.removeKeHoachTour(matour);
+    public boolean removeKeHoachTour(String makhtour){
+        // ====== KIỂM TRA CHẶN XÓA KHI CÓ HÓA ĐƠN (Lỗi 4) ======
+        HoaDonBUS hdBus = new HoaDonBUS();
+        for (org.example.dto.HoaDonDTO hd : hdBus.docDS()) {
+            if (hd.getMaKHTour().equalsIgnoreCase(makhtour)) {
+                JOptionPane.showMessageDialog(null, "Lỗi: Kế hoạch tour này đã có khách hàng đặt vé (Đã lập hóa đơn).\nKHÔNG THỂ XÓA XÓA TRỰC TIẾP!\nBạn chỉ có thể đổi trạng thái hoặc chờ hoàn tất tour.", "Cảnh báo bảo mật", JOptionPane.WARNING_MESSAGE);
+                return false; // Chặn lập tức
+            }
+        }
+
+        boolean success = keHoachTourDAO.removeKeHoachTour(makhtour);
+        if(success) {
+            lsKeHoachTour.removeIf(kt -> kt.getMaKHTour().equals(makhtour));
+        }
         return success;
     }
 
     public _KeHoachTourDTO getById(String maKHTour){
-        _KeHoachTourDTO result = new _KeHoachTourDTO();
+        if (lsKeHoachTour == null) getAllKeHoachTours();
+
         for (_KeHoachTourDTO kt : lsKeHoachTour){
             if(kt.getMaKHTour().trim().equalsIgnoreCase(maKHTour)) {
-                result = kt;
-                break;
+                return kt;
             }
         }
-        return result;
+        return null;
     }
 
     public boolean existedKeHoachTourWithID(String maKHTour){
+        if (lsKeHoachTour == null) getAllKeHoachTours();
         for (_KeHoachTourDTO kt : lsKeHoachTour){
-            if(kt.getMaTour().trim().equalsIgnoreCase(maKHTour))
+            if(kt.getMaKHTour().trim().equalsIgnoreCase(maKHTour))
                 return true;
         }
         return false;

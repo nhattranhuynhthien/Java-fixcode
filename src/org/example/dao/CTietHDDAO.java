@@ -70,12 +70,9 @@ public class CTietHDDAO {
         String sqlUpdateCT = "Update cthoadon set giave = giave + ? where mahd=? and makhang=?";
         String sqlInsertCT = "Insert into cthoadon(mahd,makhang,giave) Values(?,?,?)";
 
-        String sqlUpdateHD = "UPDATE hoadon SET soluong = soluong + 1, tongtien = tongtien + ? WHERE mahd = ?";
-
         // Truy vấn lấy Kế hoạch tour và thêm khách hàng
         String sqlGetMaKHTour = "SELECT makhtour FROM hoadon WHERE mahd = ?";
         String sqlInsertKHKHTour = "INSERT INTO khang_khtour(MaKHang, MaKHTour, GiaVe) VALUES(?, ?, ?)";
-        String sqlUpdateKeHoachTour = "UPDATE kehoachtour SET tongsove = tongsove - 1 WHERE makhtour = ?";
 
         Connection conn = null;
         try {
@@ -119,28 +116,14 @@ public class CTietHDDAO {
                 }
             }
 
-            // 3. Cập nhật Hóa Đơn (Tăng số lượng khách, cộng tổng tiền)
-            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateHD)) {
-                ps.setFloat(1, ct.getGiaVe());
-                ps.setString(2, ct.getMaHD());
-                if (ps.executeUpdate() <= 0) { conn.rollback(); return false; }
-            }
-
-            // 4. Thêm khách đi tour vào danh sách KHang_KHTour
+            // 3. Thêm khách đi tour vào danh sách KHang_KHTour
             try (PreparedStatement ps = conn.prepareStatement(sqlInsertKHKHTour)) {
                 ps.setString(1, ct.getMaKHDi());
                 ps.setString(2, maKHTour);
                 ps.setLong(3, (long) ct.getGiaVe());
                 ps.executeUpdate();
             } catch (SQLException e) {
-                // Bỏ qua lỗi nếu hành khách này đã được thêm vào tour từ trước 
-                // (tránh lỗi khóa chính PK)
-            }
-
-            // 5. Trừ đi 1 vé trong Kế hoạch Tour
-            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateKeHoachTour)) {
-                ps.setString(1, maKHTour);
-                ps.executeUpdate();
+                // Bỏ qua lỗi nếu hành khách này đã được thêm vào tour từ trước
             }
 
             conn.commit();
@@ -163,11 +146,8 @@ public class CTietHDDAO {
         float giaHienTai = 0;
 
         String sqlCheck = "SELECT giave FROM cthoadon WHERE mahd=? AND makhang=?";
-        String sqlUpdateHD = "UPDATE hoadon SET soluong = soluong - 1, tongtien = tongtien - ? WHERE mahd = ?";
-
         String sqlGetMaKHTour = "SELECT makhtour FROM hoadon WHERE mahd = ?";
         String sqlDeleteKHKHTour = "DELETE FROM khang_khtour WHERE MaKHang = ? AND MaKHTour = ?";
-        String sqlHoanVe = "UPDATE kehoachtour SET tongsove = tongsove + 1 WHERE makhtour = ?";
 
         Connection conn = null;
         try {
@@ -210,25 +190,12 @@ public class CTietHDDAO {
                     ps.executeUpdate();
                 }
 
-                // Nếu xóa hẳn CT HD -> Xóa khách hàng khỏi Kế hoạch tour
+                // Xóa khách hàng khỏi Kế hoạch tour
                 try (PreparedStatement ps = conn.prepareStatement(sqlDeleteKHKHTour)) {
                     ps.setString(1, makh);
                     ps.setString(2, maKHTour);
                     ps.executeUpdate();
                 }
-            }
-
-            // 4. Cập nhật Hóa Đơn (-1 người, - tiền)
-            try (PreparedStatement ps = conn.prepareStatement(sqlUpdateHD)) {
-                ps.setFloat(1, giaVeGoc);
-                ps.setString(2, mahd);
-                ps.executeUpdate();
-            }
-
-            // 5. Cập nhật KeHoachTour (+1 vé)
-            try (PreparedStatement ps = conn.prepareStatement(sqlHoanVe)) {
-                ps.setString(1, maKHTour);
-                ps.executeUpdate();
             }
 
             conn.commit();
@@ -243,7 +210,6 @@ public class CTietHDDAO {
         }
     }
 
-    // ... Giữ nguyên các hàm còn lại: laygia, timNangcao, suaCthd ...
     public float laygia(String mahd){
         float gia=0;
         String makht="";

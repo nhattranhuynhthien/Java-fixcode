@@ -3,12 +3,37 @@ package org.example.dao;
 import org.example.dto._CTietKHTourDTO;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class _CTietKHTourDAO {
     Connection c = _MyConnection.getConnection();
 
     public _CTietKHTourDAO(){
+    }
+
+    // ====== HÀM HỖ TRỢ: Đổi ngày từ giao diện (dd/MM/yyyy) sang chuẩn MySQL (YYYY-MM-DD) ======
+    private java.sql.Date convertToSqlDate(String dateStr) {
+        try {
+            if (dateStr == null || dateStr.trim().isEmpty()) return null;
+            if (dateStr.contains("/")) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                LocalDate localDate = LocalDate.parse(dateStr, formatter);
+                return java.sql.Date.valueOf(localDate);
+            } else {
+                return java.sql.Date.valueOf(dateStr); // Nếu đã là yyyy-MM-dd
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // ====== HÀM HỖ TRỢ: Đổi ngày từ MySQL (YYYY-MM-DD) sang chuẩn giao diện (dd/MM/yyyy) ======
+    private String convertToGuiDateString(Date sqlDate) {
+        if (sqlDate == null) return "";
+        return sqlDate.toLocalDate().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
     }
 
     public ArrayList<_CTietKHTourDTO> getAllCTietKHTours(){
@@ -19,9 +44,13 @@ public class _CTietKHTourDAO {
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
+                // Chuyển đổi ngày từ CSDL ra định dạng dd/MM/yyyy cho DTO hiển thị lên bảng
+                String ngayThucHien = convertToGuiDateString(rs.getDate(2));
+                if (ngayThucHien.isEmpty()) ngayThucHien = rs.getString(2); // Fallback
+
                 _CTietKHTourDTO t = new _CTietKHTourDTO(
                         rs.getString(1),
-                        rs.getString(2),
+                        ngayThucHien,
                         rs.getLong(3),
                         rs.getLong(4),
                         rs.getLong(5),
@@ -55,7 +84,8 @@ public class _CTietKHTourDAO {
 
             PreparedStatement ps = c.prepareStatement(sql);
             ps.setString(1, t.getMaCTietKHTour());
-            ps.setString(2, t.getNgayThucHien());
+            // FIX: Dùng hàm convert để giải quyết triệt để lỗi Incorrect Date Value
+            ps.setDate(2, convertToSqlDate(t.getNgayThucHien()));
             ps.setLong(3, t.getTongChi());
             ps.setLong(4, t.getTienO());
             ps.setLong(5, t.getTienAn());
@@ -66,7 +96,39 @@ public class _CTietKHTourDAO {
 
             ps.executeUpdate();
 
-            // Tự động tính lại tổng chi
+            // Tự động tính lại tổng chi cho KHTour
+            updateTongChiKeHoachTour(t.getMaKHTour());
+
+            c.commit();
+            return true;
+        } catch (SQLException e) {
+            try { c.rollback(); } catch(SQLException ex){}
+            e.printStackTrace();
+            return false;
+        } finally {
+            try { c.setAutoCommit(true); } catch(SQLException ex){}
+        }
+    }
+
+    public boolean editCTietKHTour(_CTietKHTourDTO t){
+        String sql = "UPDATE ctietkhtour SET ngaythuchien=?, tongchi=?, tieno=?, tienan=?, tiendilai=?, diemdi=?, diemden=?, makhtour=? WHERE mactietkhtour=?";
+        try {
+            c.setAutoCommit(false);
+
+            PreparedStatement ps = c.prepareStatement(sql);
+            // FIX: Tương tự như hàm Thêm
+            ps.setDate(1, convertToSqlDate(t.getNgayThucHien()));
+            ps.setLong(2, t.getTongChi());
+            ps.setLong(3, t.getTienO());
+            ps.setLong(4, t.getTienAn());
+            ps.setLong(5, t.getTienDiLai());
+            ps.setString(6, t.getDiemDi());
+            ps.setString(7, t.getDiemDen());
+            ps.setString(8, t.getMaKHTour());
+            ps.setString(9, t.getMaCTietKHTour());
+
+            ps.executeUpdate();
+
             updateTongChiKeHoachTour(t.getMaKHTour());
 
             c.commit();
@@ -106,37 +168,6 @@ public class _CTietKHTourDAO {
             }
             c.rollback();
             return false;
-        } catch (SQLException e) {
-            try { c.rollback(); } catch(SQLException ex){}
-            e.printStackTrace();
-            return false;
-        } finally {
-            try { c.setAutoCommit(true); } catch(SQLException ex){}
-        }
-    }
-
-    public boolean editCTietKHTour(_CTietKHTourDTO t){
-        String sql = "UPDATE ctietkhtour SET ngaythuchien=?, tongchi=?, tieno=?, tienan=?, tiendilai=?, diemdi=?, diemden=?, makhtour=? WHERE mactietkhtour=?";
-        try {
-            c.setAutoCommit(false);
-
-            PreparedStatement ps = c.prepareStatement(sql);
-            ps.setString(1, t.getNgayThucHien());
-            ps.setLong(2, t.getTongChi());
-            ps.setLong(3, t.getTienO());
-            ps.setLong(4, t.getTienAn());
-            ps.setLong(5, t.getTienDiLai());
-            ps.setString(6, t.getDiemDi());
-            ps.setString(7, t.getDiemDen());
-            ps.setString(8, t.getMaKHTour());
-            ps.setString(9, t.getMaCTietKHTour());
-
-            ps.executeUpdate();
-
-            updateTongChiKeHoachTour(t.getMaKHTour());
-
-            c.commit();
-            return true;
         } catch (SQLException e) {
             try { c.rollback(); } catch(SQLException ex){}
             e.printStackTrace();

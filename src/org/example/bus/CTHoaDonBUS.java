@@ -1,7 +1,11 @@
 package org.example.bus;
 import org.example.dao.CTietHDDAO;
 import org.example.dao._KeHoachTourDAO;
+import org.example.dao.HoaDonDAO;
 import org.example.dto.CTietHDDTO;
+import org.example.dto.HoaDonDTO;
+
+import javax.swing.JOptionPane;
 import java.util.ArrayList;
 
 public class CTHoaDonBUS {
@@ -16,8 +20,6 @@ public class CTHoaDonBUS {
             ds=dao.getDs();
         }
     }
-
-    // ... Giữ nguyên các hàm docDs(), getDs(), timCtiethd(), timCt() ...
 
     public void docDs(){
         ds=dao.getDs();
@@ -42,22 +44,50 @@ public class CTHoaDonBUS {
         return null;
     }
 
-    // CHỈNH SỬA: Đẩy xuống DAO trước, nếu thành công mới add vào list (Chống rác dữ liệu)
+    // ====== HÀM MỚI: Đồng bộ tổng tiền về Hóa đơn gốc (Lỗi 2) ======
+    private void dongBoTienHoaDon(String maHD) {
+        float tongTienMoi = 0;
+        ArrayList<CTietHDDTO> list = getDstheoma(maHD);
+        for (CTietHDDTO c : list) {
+            tongTienMoi += c.getGiaVe();
+        }
+        HoaDonDAO hdDao = new HoaDonDAO();
+        HoaDonDTO hd = hdDao.timHoaDon(maHD);
+        if (hd != null) {
+            hd.setTongTien((int) tongTienMoi);
+            hdDao.suaHd(hd); // Cập nhật thẳng vào DB
+            new HoaDonBUS().docDs(); // Ép Hóa Đơn BUS tải lại dữ liệu mới
+            hdDao.dongBoDoanhThuKeHoachTour(hd.getMaKHTour()); // Kéo theo đồng bộ KHTour
+        }
+    }
+
     public boolean themCTietHd(CTietHDDTO ct){
+        // ====== KIỂM TRA SỐ LƯỢNG NGƯỜI TỐI ĐA (Lỗi 1) ======
+        HoaDonBUS hdBus = new HoaDonBUS();
+        HoaDonDTO hd = hdBus.timHd(ct.getMaHD());
+        if (hd != null) {
+            ArrayList<CTietHDDTO> danhSachHienTai = getDstheoma(ct.getMaHD());
+            if (danhSachHienTai.size() >= hd.getSoLuong()) {
+                JOptionPane.showMessageDialog(null, "Lỗi: Hóa đơn này chỉ được phép nhập tên cho tối đa " + hd.getSoLuong() + " hành khách!\nĐể thêm người, vui lòng sửa lại số lượng bên bảng Hóa Đơn.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return false; // Chặn thêm
+            }
+        }
+
         if(dao.themCtietHD(ct)){
             ds.add(ct);
+            dongBoTienHoaDon(ct.getMaHD()); // Đồng bộ tiền lên Hóa Đơn
             return true;
         }
         return false;
     }
 
-    // CHỈNH SỬA TƯƠNG TỰ
     public boolean xoaCtietHd(String mact,String makh){
         CTietHDDTO ct = timCt(mact, makh);
         if (ct == null) return false;
 
         if(dao.xoaCtietHd(mact, makh)) {
             ds.remove(ct);
+            dongBoTienHoaDon(mact); // Đồng bộ trừ tiền
             return true;
         }
         return false;
@@ -76,10 +106,13 @@ public class CTHoaDonBUS {
                 }
             }
         }
-        if(dao.TimHD(ct.getMaHD())==null)
+        if(dao.TimHD(ct.getMaHD())==null) {
             flag=false;
-        else
-            dao.suaCthd(ct);
+        } else {
+            if (dao.suaCthd(ct)) {
+                dongBoTienHoaDon(ct.getMaHD()); // Đồng bộ tiền lại nếu giá vé bị sửa đổi
+            }
+        }
 
         return flag;
     }
