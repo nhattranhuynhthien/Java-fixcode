@@ -1,5 +1,6 @@
 package org.example.gui.dialog;
 
+import com.toedter.calendar.JDateChooser;
 import org.example.bus.NhanVienBUS;
 import org.example.bus._KeHoachTourBUS;
 import org.example.dto.NhanVienDTO;
@@ -7,17 +8,17 @@ import org.example.dto._KeHoachTourDTO;
 import org.example.gui.panel.UIColors;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.ArrayList;
 
 public class _KeHoachTourDialog extends JDialog {
     private JLabel jlbMaKHTour, jlbNgayKhoiHanh, jlbNgayKetThuc, jlbTongSoVe, jlbTongChi, jlbTongThu, jlbMaTour, jlbMaNVHD;
-    private JTextField txtMaKHTour, txtNgayKhoiHanh, txtNgayKetThuc, txtTongSoVe, txtTongChi, txtTongThu, txtMaTour;
-    DefaultTableModel tableModel;
+    private JTextField txtMaKHTour, txtTongSoVe, txtTongChi, txtTongThu, txtMaTour;
+    private JDateChooser txtNgayKhoiHanh, txtNgayKetThuc;
+
     private JComboBox<NhanVienDTO> cbStaff;
     private DefaultComboBoxModel<NhanVienDTO> staffModel;
     private JButton saveBtn, cancelBtn;
@@ -26,8 +27,6 @@ public class _KeHoachTourDialog extends JDialog {
     private _KeHoachTourBUS keHoachTourBUS;
     private _KeHoachTourDTO keHoachTourDTO;
     private String maTour;
-    private LocalDate today;
-    private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public _KeHoachTourDialog(_KeHoachTourBUS keHoachTourBUS, _KeHoachTourDTO keHoachTourDTO, String maTour) {
         this.keHoachTourBUS = keHoachTourBUS;
@@ -36,10 +35,9 @@ public class _KeHoachTourDialog extends JDialog {
         this.nhanVienBUS = new NhanVienBUS();
 
         cbStaff = new JComboBox<>();
-        today = LocalDate.now();
 
         setTitle(keHoachTourDTO == null ? "Thêm kế hoạch tour" : "Sửa kế hoạch Tour");
-        setSize(300, 440);
+        setSize(350, 500);
         setLocationRelativeTo(null);
         setModal(true);
 
@@ -51,7 +49,8 @@ public class _KeHoachTourDialog extends JDialog {
 
     private void init(){
         setLayout(new BorderLayout());
-        JPanel formPanel = new JPanel(new GridLayout(9, 2));
+        JPanel formPanel = new JPanel(new GridLayout(9, 2, 10, 10));
+        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         JPanel southPanel = new JPanel(new FlowLayout());
 
         save();
@@ -59,81 +58,66 @@ public class _KeHoachTourDialog extends JDialog {
         cancel();
         southPanel.add(cancelBtn);
 
-        jlbMaKHTour = new JLabel("Mã kế hoạch tour");
-        jlbMaKHTour.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
-        formPanel.add(jlbMaKHTour);
+        formPanel.add(new JLabel("Mã kế hoạch tour"));
         txtMaKHTour = new JTextField();
         formPanel.add(txtMaKHTour);
 
-        jlbNgayKhoiHanh = new JLabel("Ngày khởi hành");
-        jlbNgayKhoiHanh.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
-        formPanel.add(jlbNgayKhoiHanh);
-        txtNgayKhoiHanh = new JTextField();
-        txtNgayKhoiHanh.setText(today.format(formatter));
+        formPanel.add(new JLabel("Ngày khởi hành"));
+        txtNgayKhoiHanh = new JDateChooser();
+        txtNgayKhoiHanh.setDateFormatString("dd/MM/yyyy");
         formPanel.add(txtNgayKhoiHanh);
 
-        jlbNgayKetThuc = new JLabel("Ngày kết thúc");
-        jlbNgayKetThuc.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
-        formPanel.add(jlbNgayKetThuc);
-        txtNgayKetThuc = new JTextField();
-        txtNgayKetThuc.setText(today.plusDays(1).format(formatter));
+        formPanel.add(new JLabel("Ngày kết thúc"));
+        txtNgayKetThuc = new JDateChooser();
+        txtNgayKetThuc.setDateFormatString("dd/MM/yyyy");
         formPanel.add(txtNgayKetThuc);
 
-        jlbTongSoVe = new JLabel("Tổng số vé");
-        jlbTongSoVe.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
-        formPanel.add(jlbTongSoVe);
+        formPanel.add(new JLabel("Tổng số vé"));
         txtTongSoVe = new JTextField();
         formPanel.add(txtTongSoVe);
 
-        jlbTongChi = new JLabel("Tổng chi");
-        jlbTongChi.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
-        formPanel.add(jlbTongChi);
-        txtTongChi = new JTextField();
-        txtTongChi.setText("0"); // Đặt mặc định là 0
-        txtTongChi.setEditable(false); // Khóa không cho sửa
+        // KHÔI PHỤC LOGIC: Mặc định là 0 và không cho sửa trực tiếp
+        formPanel.add(new JLabel("Tổng chi"));
+        txtTongChi = new JTextField("0");
+        txtTongChi.setEditable(false);
         formPanel.add(txtTongChi);
 
-        jlbTongThu = new JLabel("Tổng thu");
-        jlbTongThu.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
-        formPanel.add(jlbTongThu);
-        txtTongThu = new JTextField();
-        txtTongThu.setText("0"); // Đặt mặc định là 0
-        txtTongThu.setEditable(false); // Khóa không cho sửa
+        formPanel.add(new JLabel("Tổng thu"));
+        txtTongThu = new JTextField("0");
+        txtTongThu.setEditable(false);
         formPanel.add(txtTongThu);
 
-        jlbMaTour = new JLabel("Mã tour");
-        jlbMaTour.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
-        formPanel.add(jlbMaTour);
+        formPanel.add(new JLabel("Mã tour"));
         txtMaTour = new JTextField(maTour);
         txtMaTour.setEnabled(false);
         formPanel.add(txtMaTour);
 
-        jlbMaNVHD = new JLabel("Nhân viên HD");
-        jlbMaNVHD.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
-        formPanel.add(jlbMaNVHD);
-
+        formPanel.add(new JLabel("Nhân viên HD"));
         staffModel = CBStaffPresent();
         cbStaff.setModel(staffModel);
-        if (staffModel.getSize() > 0) {
-            cbStaff.setSelectedIndex(0);
-        }
         formPanel.add(cbStaff);
 
         add(formPanel, BorderLayout.CENTER);
         add(southPanel, BorderLayout.SOUTH);
     }
 
-    private void loadData () {
+    private void loadData() {
         txtMaKHTour.setText(keHoachTourDTO.getMaKHTour());
         txtMaKHTour.setEnabled(false);
-        txtNgayKhoiHanh.setText(formatter.format(keHoachTourDTO.getNgayKhoiHanh()));
-        txtNgayKetThuc.setText(formatter.format(keHoachTourDTO.getNgayKetThuc()));
-        txtTongSoVe.setText(keHoachTourDTO.getTongSoVe() + "");
-        txtTongChi.setText(keHoachTourDTO.getTongChi() + "");
-        txtTongThu.setText(keHoachTourDTO.getTongThu() + "");
-        txtMaTour.setText(keHoachTourDTO.getMaTour());
 
-        // FIX LỖI: Load đúng nhân viên khi chọn chức năng Sửa
+        if (keHoachTourDTO.getNgayKhoiHanh() != null) {
+            txtNgayKhoiHanh.setDate(Date.from(keHoachTourDTO.getNgayKhoiHanh().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        }
+        if (keHoachTourDTO.getNgayKetThuc() != null) {
+            txtNgayKetThuc.setDate(Date.from(keHoachTourDTO.getNgayKetThuc().atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        }
+
+        txtTongSoVe.setText(String.valueOf(keHoachTourDTO.getTongSoVe()));
+
+        // Đổ dữ liệu cũ khi ở chế độ Sửa
+        txtTongChi.setText(String.valueOf(keHoachTourDTO.getTongChi()));
+        txtTongThu.setText(String.valueOf(keHoachTourDTO.getTongThu()));
+
         for(int i = 0; i < cbStaff.getItemCount(); i++){
             NhanVienDTO nv = cbStaff.getItemAt(i);
             if(nv.getMaNV().equalsIgnoreCase(keHoachTourDTO.getMaNVHD())){
@@ -145,12 +129,10 @@ public class _KeHoachTourDialog extends JDialog {
 
     private DefaultComboBoxModel<NhanVienDTO> CBStaffPresent(){
         DefaultComboBoxModel<NhanVienDTO> model = new DefaultComboBoxModel<>();
-        nhanVienBUS.docDSNV();
-        ArrayList<NhanVienDTO> lsStaff = NhanVienBUS.dsNV; // Đảm bảo dsNV được lấy từ Static list
-        if (lsStaff == null || lsStaff.isEmpty()) return model;
-
-        for (NhanVienDTO t : lsStaff)
-            model.addElement(t);
+        ArrayList<NhanVienDTO> lsNhanViens = NhanVienBUS.dsNV;
+        for(NhanVienDTO nv : lsNhanViens){
+            model.addElement(nv);
+        }
         return model;
     }
 
@@ -159,80 +141,53 @@ public class _KeHoachTourDialog extends JDialog {
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
+        btn.setFont(new Font("SansSerif", Font.BOLD, 13));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setContentAreaFilled(true);
+        btn.setOpaque(true);
+        btn.setBorderPainted(false);
         return btn;
     }
 
     public void save(){
         saveBtn = createBtn("Lưu", UIColors.SAVE);
         saveBtn.addActionListener(e -> {
-            if(isEmpty(txtMaKHTour, txtNgayKhoiHanh, txtNgayKetThuc, txtTongSoVe, txtTongChi, txtTongThu)){
+            if(txtMaKHTour.getText().trim().isEmpty() || txtNgayKhoiHanh.getDate() == null || txtNgayKetThuc.getDate() == null){
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đầy đủ thông tin");
                 return;
             }
 
-            NhanVienDTO selectedStaff = getStaffSelected();
-            if(selectedStaff == null){
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn Nhân viên hướng dẫn!");
-                return;
-            }
-
-            int tongSoVe;
-            long tongChi, tongThu;
-            LocalDate ngayKhoiHanh, ngayKetThuc;
-            try {
-                tongSoVe = Integer.parseInt(txtTongSoVe.getText().trim());
-                tongChi = Long.parseLong(txtTongChi.getText().trim());
-                tongThu = Long.parseLong(txtTongThu.getText().trim());
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số!");
-                return;
-            }
+            NhanVienDTO selectedStaff = (NhanVienDTO) cbStaff.getSelectedItem();
+            LocalDate ngayKhoiHanh = txtNgayKhoiHanh.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            LocalDate ngayKetThuc = txtNgayKetThuc.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 
             try {
-                ngayKhoiHanh = LocalDate.parse(txtNgayKhoiHanh.getText(), formatter);
-                ngayKetThuc = LocalDate.parse(txtNgayKetThuc.getText(), formatter);
-            } catch (DateTimeParseException ex) {
-                JOptionPane.showMessageDialog(this, "Ngày phải đúng định dạng dd/MM/yyyy!");
-                return;
-            }
+                int tongSoVe = Integer.parseInt(txtTongSoVe.getText().trim());
+                long tongChi = Long.parseLong(txtTongChi.getText().trim());
+                long tongThu = Long.parseLong(txtTongThu.getText().trim());
 
-            if(keHoachTourDTO == null){
-                if(keHoachTourBUS.existedKeHoachTourWithID(txtMaKHTour.getText())){
-                    JOptionPane.showMessageDialog(null, "Mã kế hoạch tour đã tồn tại, vui lòng nhập mã khác!");
-                }else{
+                if(keHoachTourDTO == null){
                     _KeHoachTourDTO keHoachTourMoi = new _KeHoachTourDTO(
-                            txtMaKHTour.getText().trim(), ngayKhoiHanh,
-                            ngayKetThuc, tongSoVe, tongChi, tongThu,
-                            selectedStaff.getMaNV(), txtMaTour.getText()
+                            txtMaKHTour.getText().trim(), ngayKhoiHanh, ngayKetThuc,
+                            tongSoVe, tongChi, tongThu, selectedStaff.getMaNV(), txtMaTour.getText()
                     );
-
-                    String error = keHoachTourBUS.validateKeHoachTour(keHoachTourMoi);
-                    if(error == null){
-                        if(keHoachTourBUS.addKeHoachTour(keHoachTourMoi)) {
-                            JOptionPane.showMessageDialog(this, "Đã thêm thành công!");
-                            dispose();
-                        }else{
-                            JOptionPane.showMessageDialog(this, "Thêm thất bại!");
-                        }
-                    }else{
-                        JOptionPane.showMessageDialog(this, error);
+                    if(keHoachTourBUS.addKeHoachTour(keHoachTourMoi)) {
+                        JOptionPane.showMessageDialog(this, "Đã thêm thành công!");
+                        dispose();
+                    }
+                } else {
+                    keHoachTourDTO.setNgayKhoiHanh(ngayKhoiHanh);
+                    keHoachTourDTO.setNgayKetThuc(ngayKetThuc);
+                    keHoachTourDTO.setTongSoVe(tongSoVe);
+                    keHoachTourDTO.setMaNVHD(selectedStaff.getMaNV());
+                    // Không setTongChi/TongThu ở đây để tránh ghi đè dữ liệu đã tính toán từ DB
+                    if(keHoachTourBUS.editKeHoachTour(keHoachTourDTO)){
+                        JOptionPane.showMessageDialog(this, "Đã chỉnh sửa thành công!");
+                        dispose();
                     }
                 }
-            }else{
-                keHoachTourDTO.setNgayKhoiHanh(ngayKhoiHanh);
-                keHoachTourDTO.setNgayKetThuc(ngayKetThuc);
-                keHoachTourDTO.setTongSoVe(tongSoVe);
-                keHoachTourDTO.setTongChi(tongChi);
-                keHoachTourDTO.setTongThu(tongThu);
-                keHoachTourDTO.setMaNVHD(selectedStaff.getMaNV());
-
-                if(keHoachTourBUS.editKeHoachTour(keHoachTourDTO)){
-                    JOptionPane.showMessageDialog(this, "Đã chỉnh sửa thành công!");
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Chỉnh sửa thất bại!");
-                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi định dạng số: " + ex.getMessage());
             }
         });
     }
@@ -240,18 +195,5 @@ public class _KeHoachTourDialog extends JDialog {
     public void cancel(){
         cancelBtn = createBtn("Hủy", UIColors.CANCEL);
         cancelBtn.addActionListener(e -> dispose());
-    }
-
-    private boolean isEmpty(JTextField... fields){
-        for(JTextField field : fields){
-            if(field.getText().trim().isEmpty()){
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private NhanVienDTO getStaffSelected(){
-        return (NhanVienDTO) cbStaff.getSelectedItem();
     }
 }

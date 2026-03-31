@@ -15,14 +15,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class _KeHoachTourPanel extends JPanel {
-    // cmb
     private JComboBox<_TourDTO> cbTour;
     private DefaultComboBoxModel<_TourDTO> toursModel;
 
-    // define btn
     private JButton addBtn, deleteBtn, editBtn, detailsBtn, refreshBtn;
 
-    // relate to table
     private DefaultTableModel tableModel;
     private JTable table;
     private JScrollPane scrollPane;
@@ -33,7 +30,6 @@ public class _KeHoachTourPanel extends JPanel {
     private JLabel jlbChonTour;
     private ArrayList<_KeHoachTourDTO> lsKeHoachTours;
 
-    // formatter
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     public _KeHoachTourPanel(){
@@ -43,7 +39,6 @@ public class _KeHoachTourPanel extends JPanel {
         cbTour = new JComboBox<>();
         init();
 
-        // first load table
         _TourDTO selectedTour = (_TourDTO) cbTour.getSelectedItem();
         if(selectedTour != null)
             loadTable(selectedTour.getMaTour());
@@ -53,22 +48,18 @@ public class _KeHoachTourPanel extends JPanel {
     private void init(){
         setLayout(new BorderLayout());
 
-        //North Panel
         JPanel northPanel = new JPanel(new BorderLayout());
         JLabel lblTitle = new JLabel("QUẢN LÝ KẾ HOẠCH TOUR", JLabel.CENTER);
         lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
         northPanel.add(lblTitle, BorderLayout.NORTH);
 
-        //center panel add jlabel chose tour
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         jlbChonTour = new JLabel("Chọn Tour");
         filterPanel.add(jlbChonTour);
 
-        // Load combo tours
-        toursModel = new DefaultComboBoxModel<>();
         toursModel = CBTourPresent();
         cbTour.setModel(toursModel);
-        filterPanel.add(cbTour); // center panel add combobox tours
+        filterPanel.add(cbTour);
 
         cbTour.addActionListener(e -> {
             _TourDTO selectedTour = (_TourDTO) cbTour.getSelectedItem();
@@ -77,13 +68,10 @@ public class _KeHoachTourPanel extends JPanel {
             }
         });
 
-        //northPanel add filterPanel
         northPanel.add(filterPanel, BorderLayout.CENTER);
 
-        // init table kehoachtour
         initTable();
 
-        //South Panel contain buttons
         JPanel southPanel = new JPanel(new FlowLayout());
         add();
         southPanel.add(addBtn);
@@ -102,7 +90,6 @@ public class _KeHoachTourPanel extends JPanel {
     }
 
     private void initTable(){
-        // columns of table
         String[] columns = {"Mã kế hoạch Tour", "Ngày khởi hành", "Ngày kết thúc", "Tổng số vé", "Tổng chi", "Tổng thu", "Mã Tour", "Mã nhân viên hướng dẫn"};
 
         tableModel = new DefaultTableModel(columns, 0);
@@ -115,6 +102,7 @@ public class _KeHoachTourPanel extends JPanel {
 
     private void loadTable(String maTour){
         tableModel.setRowCount(0);
+        // Lấy danh sách kế hoạch theo mã Tour đã chọn
         lsKeHoachTours = keHoachTourBUS.getAllKeHoachToursByID(maTour);
 
         for (_KeHoachTourDTO kt : lsKeHoachTours){
@@ -132,8 +120,7 @@ public class _KeHoachTourPanel extends JPanel {
     }
 
     private DefaultComboBoxModel<_TourDTO> CBTourPresent(){
-        DefaultComboBoxModel<_TourDTO> model;
-        model = new DefaultComboBoxModel<>();
+        DefaultComboBoxModel<_TourDTO> model = new DefaultComboBoxModel<>();
         ArrayList<_TourDTO> lsTours = tourBUS.getAllTours();
         for (_TourDTO t : lsTours){
             model.addElement(t);
@@ -147,7 +134,7 @@ public class _KeHoachTourPanel extends JPanel {
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         btn.setContentAreaFilled(true);
         btn.setOpaque(true);
@@ -158,8 +145,7 @@ public class _KeHoachTourPanel extends JPanel {
 
     private void add(){
         addBtn = createBtn("Thêm kế hoạch Tour", UIColors.ADD);
-        _KeHoachTourDTO keHoachTourDTO = null;
-        addBtn.addActionListener(e -> openDiaLog(keHoachTourDTO)); // null là ở chế độ thêm, có đối tượng DTO là ở dạng sửa
+        addBtn.addActionListener(e -> openDiaLog(null));
     }
 
     private void openDiaLog(_KeHoachTourDTO keHoachTourDTO){
@@ -169,9 +155,12 @@ public class _KeHoachTourPanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Vui lòng chọn tour");
             return;
         }
-        _KeHoachTourDialog keHoachTourDialog = new _KeHoachTourDialog(keHoachTourBUS, keHoachTourDTO,( (_TourDTO)cbTour.getSelectedItem()).getMaTour());
+
+        _KeHoachTourDialog keHoachTourDialog = new _KeHoachTourDialog(keHoachTourBUS, keHoachTourDTO, selectedTour.getMaTour());
         keHoachTourDialog.setVisible(true);
 
+        // ĐÃ SỬA: Sau khi Dialog đóng (xong việc Thêm/Sửa), nạp lại dữ liệu từ DB vào BUS và vẽ lại bảng
+        keHoachTourBUS.docDs();
         loadTable(selectedTour.getMaTour());
     }
 
@@ -180,21 +169,16 @@ public class _KeHoachTourPanel extends JPanel {
         deleteBtn.setEnabled(false);
         deleteBtn.addActionListener(e ->{
             int row = table.getSelectedRow();
-            if (row == -1){
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn kế hoạch tour cần xóa");
-                return;
-            }
+            if (row == -1) return;
 
             String maKHTour = tableModel.getValueAt(row, 0).toString();
             int confirm = JOptionPane.showConfirmDialog(this, "Xác nhận xóa?");
             if(confirm == JOptionPane.YES_OPTION){
-                boolean result = keHoachTourBUS.removeKeHoachTour(maKHTour);
-                if(result)
-                    JOptionPane.showMessageDialog(null, "Đã xóa kế hoạch tour có mã: " + maKHTour);
-                else
-                    JOptionPane.showMessageDialog(null, "Không thể xóa kế hoạch tour này");
-                _TourDTO selectedTour = (_TourDTO) cbTour.getSelectedItem();
-                loadTable(selectedTour.getMaTour());
+                if(keHoachTourBUS.removeKeHoachTour(maKHTour)){
+                    JOptionPane.showMessageDialog(null, "Đã xóa thành công!");
+                    _TourDTO selectedTour = (_TourDTO) cbTour.getSelectedItem();
+                    loadTable(selectedTour.getMaTour());
+                }
             }
         });
     }
@@ -204,10 +188,7 @@ public class _KeHoachTourPanel extends JPanel {
         editBtn.setEnabled(false);
         editBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
-            if (row == -1) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn kế hoạch tour cần sửa");
-                return;
-            }
+            if (row == -1) return;
             String maKHTour = tableModel.getValueAt(row, 0).toString();
             _KeHoachTourDTO kt = keHoachTourBUS.getById(maKHTour);
             openDiaLog(kt);
@@ -219,10 +200,7 @@ public class _KeHoachTourPanel extends JPanel {
         detailsBtn.setEnabled(false);
         detailsBtn.addActionListener(e -> {
             int row = table.getSelectedRow();
-            if (row == -1) {
-                JOptionPane.showMessageDialog(this, "Vui lòng chọn kế hoạch tour để xem");
-                return;
-            }
+            if (row == -1) return;
 
             String maKHTour = tableModel.getValueAt(row, 0).toString();
             _KeHoachTourDetailDialog dialog = new _KeHoachTourDetailDialog(maKHTour);
@@ -233,15 +211,18 @@ public class _KeHoachTourPanel extends JPanel {
     private void refresh(){
         refreshBtn = createBtn("Làm mới", UIColors.REFRESH);
         refreshBtn.addActionListener(e -> {
-            //load tours when press refresh
-            toursModel = new DefaultComboBoxModel<>();
-            toursModel = CBTourPresent();
-            cbTour.setModel(toursModel);
-            CBTourPresent();
+            // 1. Cập nhật lại danh sách Tour trong ComboBox
+            cbTour.setModel(CBTourPresent());
 
-            // get selected tour
+            // ĐÃ SỬA: 2. Gọi hàm nạp lại toàn bộ dữ liệu từ Database vào lớp BUS
+            keHoachTourBUS.docDs();
+
+            // 3. Hiển thị lại bảng theo Tour đang chọn
             _TourDTO selectedTour = (_TourDTO) cbTour.getSelectedItem();
-            loadTable(selectedTour.getMaTour());
+            if(selectedTour != null){
+                loadTable(selectedTour.getMaTour());
+            }
+            JOptionPane.showMessageDialog(this, "Đã cập nhật dữ liệu mới nhất!");
         });
     }
 

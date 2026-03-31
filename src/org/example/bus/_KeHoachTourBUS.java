@@ -117,4 +117,11 @@ public class _KeHoachTourBUS {
         }
         return false;
     }
+    public void loadDSKHTour() {
+        // Phải xóa danh sách cũ trước khi nạp mới
+        if (lsKeHoachTour != null) {
+            lsKeHoachTour.clear();
+        }
+        lsKeHoachTour = keHoachTourDAO.getAllKeHoachTours(); // Gọi DAO để lấy dữ liệu mới từ DB
+    }
 }

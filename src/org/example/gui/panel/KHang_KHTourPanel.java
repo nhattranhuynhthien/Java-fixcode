@@ -28,6 +28,7 @@ public class KHang_KHTourPanel extends JPanel {
         if (!PhanQuyen.laQuanLy()) {
             btnXoa.setEnabled(false);
         }
+        hasSelectedRow();
         txtSearch.getDocument().addDocumentListener(new DocumentListener() {
 
             private void search() {
@@ -130,7 +131,20 @@ public class KHang_KHTourPanel extends JPanel {
         jPanel3.add(btnLamMoi);
 
         add(jPanel3, BorderLayout.PAGE_END);
+        jTable2.getSelectionModel().addListSelectionListener(e -> {
+            // Kiểm tra xem có dòng nào đang được chọn không
+            boolean coDongDuocChon = jTable2.getSelectedRow() != -1;
+
+            // Bật nút Sửa khi có dòng được chọn, tắt khi không chọn gì
+            btnSua.setEnabled(coDongDuocChon);
+
+            // Nút Xóa chỉ bật nếu là Quản lý và có chọn dòng
+            if (PhanQuyen.laQuanLy()) {
+                btnXoa.setEnabled(coDongDuocChon);
+            }
+        });
     }// </editor-fold>//GEN-END:initComponents
+
     private void jComboBox2ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox2ActionPerformed
@@ -183,7 +197,6 @@ public class KHang_KHTourPanel extends JPanel {
 
     private void sua(){
         btnSua = createBtn("Sửa", UIColors.EDIT);
-        btnSua.setEnabled(false);
         btnSua.addActionListener(v -> {
             int i = jTable2.getSelectedRow();
 
@@ -258,6 +271,14 @@ public class KHang_KHTourPanel extends JPanel {
                 }
             }
         }
+    }
+
+    private void hasSelectedRow(){
+        jTable2.getSelectionModel().addListSelectionListener(e ->{
+            boolean hadSelection = jTable2.getSelectedRow() != -1;
+            btnXoa.setEnabled(hadSelection);
+            btnSua.setEnabled(hadSelection);
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
