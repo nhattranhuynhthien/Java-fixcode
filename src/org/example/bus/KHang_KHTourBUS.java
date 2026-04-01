@@ -8,13 +8,19 @@ import java.util.List;
 public class KHang_KHTourBUS {
     static ArrayList<KHang_KHTourDTO> dsKHKHTour;
     static KHang_KHTourDAO dataKHKHTour = new KHang_KHTourDAO();
-    public KHang_KHTourBUS() {}
+
+    public KHang_KHTourBUS() {
+        // Tự động đọc dữ liệu lên khi khởi tạo BUS để mảng không bị null
+        docDSKHKHTour();
+    }
+
     public void docDSKHKHTour() {
         if (dsKHKHTour == null) {
             dsKHKHTour = new ArrayList<KHang_KHTourDTO>();
         }
         dsKHKHTour = dataKHKHTour.layDanhSachKHang_KHTour();
     }
+
     public void them(KHang_KHTourDTO kht) {
         try{
             if (dsKHKHTour == null) {
@@ -27,7 +33,7 @@ public class KHang_KHTourBUS {
                 return;
             }
             for (KHang_KHTourDTO existingKHT : dsKHKHTour) {
-                if (existingKHT.getMaKHTour().equals(kht.getMaKHTour())) {
+                if (existingKHT.getMaKHTour().equals(kht.getMaKHTour()) && existingKHT.getMaKHang().equals(kht.getMaKHang())) {
                     return;
                 }
             }
@@ -42,11 +48,12 @@ public class KHang_KHTourBUS {
 
     public void xoaKHang_KHTour(String maKHTour, String maKHang) {
         try {
-            if (dsKHKHTour == null) {
-                return;
-            }
+            // Luôn gọi DAO để xóa dòng dưới Database
             dataKHKHTour.xoaKHang_KHTour(maKHTour, maKHang);
-            dsKHKHTour.removeIf(kht -> kht.getMaKHTour().equals(maKHTour) && kht.getMaKHang().equals(maKHang));
+            // Cập nhật lại list trên bộ nhớ
+            if (dsKHKHTour != null) {
+                dsKHKHTour.removeIf(kht -> kht.getMaKHTour().equals(maKHTour) && kht.getMaKHang().equals(maKHang));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -89,11 +96,35 @@ public class KHang_KHTourBUS {
         }
     }
 
+    // Bổ sung thêm hàm tìm chính xác theo Cả mã Tour và mã Khách
+    public KHang_KHTourDTO timKiemChinhXac(String maKHTour, String maKHang) {
+        try {
+            if (dsKHKHTour == null) return null;
+            for (KHang_KHTourDTO kht : dsKHKHTour) {
+                if (kht.getMaKHTour().equals(maKHTour) && kht.getMaKHang().equals(maKHang)) {
+                    return kht;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public List<KHang_KHTourDTO> timKHang_KHTours(String column, String value) {
         try {
             if (dsKHKHTour == null || column == null || value == null) {
                 return new ArrayList<>();
             }
+
+            // BỔ SUNG FIX LOGIC: Nếu tìm Họ hoặc Tên thì móc thẳng vào hàm DAO có sẵn
+            if (column.equals("Ho")) {
+                return dataKHKHTour.timKHang_KHToursTheoHo(value);
+            }
+            if (column.equals("Ten")) {
+                return dataKHKHTour.timKHang_KHToursTheoTen(value);
+            }
+
             List<KHang_KHTourDTO> result = new ArrayList<>();
             for (KHang_KHTourDTO kht : dsKHKHTour) {
                 switch (column) {
@@ -114,11 +145,10 @@ public class KHang_KHTourBUS {
                                 result.add(kht);
                             }
                         } catch (NumberFormatException e) {
-                            // Ignore invalid number format
+                            // Bỏ qua lỗi format
                         }
                         break;
                     default:
-                        // Invalid column name
                         return new ArrayList<>();
                 }
             }

@@ -163,12 +163,13 @@ public boolean themKHang_KHTour(KHang_KHTourDTO kht) {
     }
 
     public boolean capNhatKHang_KHTour(KHang_KHTourDTO kht) {
-        String sql = "UPDATE KHang_KHTour SET MaKHang = ?, GiaVe = ? WHERE MaKHTour = ?";
+        // Fix: Chỉ cập nhật giá vé dựa trên định danh của cả 2 khóa
+        String sql = "UPDATE KHang_KHTour SET GiaVe = ? WHERE MaKHTour = ? AND MaKHang = ?";
         try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, kht.getMaKHang());
-            pstmt.setLong(2, kht.getGiaVe());
-            pstmt.setString(3, kht.getMaKHTour());
+            pstmt.setLong(1, kht.getGiaVe());
+            pstmt.setString(2, kht.getMaKHTour());
+            pstmt.setString(3, kht.getMaKHang());
             int rowsAffected = pstmt.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {

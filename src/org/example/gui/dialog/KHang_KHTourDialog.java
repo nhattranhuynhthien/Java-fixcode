@@ -48,7 +48,12 @@ public class KHang_KHTourDialog extends JDialog {
         if (mode == Mode.EDIT && khangkhtour != null) {
             setDataToFields();
             setTitle("Sửa thông tin khách hàng - kế hoạch tour");
-        }else {
+
+            // Fix: Khóa ô nhập mã để không làm hỏng khóa chính, mở khóa Giá vé
+            txtMaKH.setEnabled(false);
+            txtMaKHTour.setEnabled(false);
+            txtGiaVe.setEnabled(true);
+        } else {
             setTitle("Thêm khách hàng - kế hoạch tour");
         }
     }

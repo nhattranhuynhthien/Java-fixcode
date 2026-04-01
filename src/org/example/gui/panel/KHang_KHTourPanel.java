@@ -67,7 +67,7 @@ public class KHang_KHTourPanel extends JPanel {
         jPanel3 = new JPanel();
         btnThem = new JButton();
         btnXoa = new JButton();
-        btnSua = new JButton();
+        //btnSua = new JButton();
         btnLamMoi = new JButton();
 
         setLayout(new BorderLayout());
@@ -132,22 +132,17 @@ public class KHang_KHTourPanel extends JPanel {
 
         add(jPanel3, BorderLayout.PAGE_END);
         jTable2.getSelectionModel().addListSelectionListener(e -> {
-            // Kiểm tra xem có dòng nào đang được chọn không
             boolean coDongDuocChon = jTable2.getSelectedRow() != -1;
-
-            // Bật nút Sửa khi có dòng được chọn, tắt khi không chọn gì
             btnSua.setEnabled(coDongDuocChon);
-
-            // Nút Xóa chỉ bật nếu là Quản lý và có chọn dòng
             if (PhanQuyen.laQuanLy()) {
                 btnXoa.setEnabled(coDongDuocChon);
             }
         });
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void jComboBox2ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jComboBox2ActionPerformed
+    private void jComboBox2ActionPerformed(ActionEvent evt) {
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox2ActionPerformed
+    }
 
     private JButton createBtn(String text, Color color){
         JButton btn = new JButton(text);
@@ -155,7 +150,7 @@ public class KHang_KHTourPanel extends JPanel {
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         btn.setContentAreaFilled(true);
         btn.setOpaque(true);
@@ -169,7 +164,6 @@ public class KHang_KHTourPanel extends JPanel {
         btnThem.addActionListener(v -> {
             khangkhtDialog = new KHang_KHTourDialog(null, true, ds, KHang_KHTourDialog.Mode.ADD, null);
             khangkhtDialog.setVisible(true);
-
             loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
         });
     }
@@ -203,7 +197,8 @@ public class KHang_KHTourPanel extends JPanel {
             if (i >= 0) {
                 String maKHang = (String) jTable2.getValueAt(i, 0);
                 String maKHTour = (String) jTable2.getValueAt(i, 3);
-                KHang_KHTourDTO khangkht = khangkhtBUS.timKiemKHang_KHTourTheoMaKHTour(maKHTour);
+                // Đã thay đổi hàm gọi thành timKiemChinhXac để giải quyết lỗi lấy sai dữ liệu dòng
+                KHang_KHTourDTO khangkht = khangkhtBUS.timKiemChinhXac(maKHTour, maKHang);
                 if (khangkht != null && khangkht.getMaKHang().equals(maKHang)) {
                     khangkhtDialog = new KHang_KHTourDialog(null, true, ds, KHang_KHTourDialog.Mode.EDIT, khangkht);
                     khangkhtDialog.setVisible(true);
@@ -221,12 +216,12 @@ public class KHang_KHTourPanel extends JPanel {
         });
     }
 
-    private void jTable2MouseClicked(MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+    private void jTable2MouseClicked(MouseEvent evt) {
         if (PhanQuyen.laQuanLy()) {
             btnXoa.setEnabled(true);
         }
         btnSua.setEnabled(true);
-    }//GEN-LAST:event_jTable2MouseClicked
+    }
 
     private void searchKHang_KHTour() {
         String keyword = txtSearch.getText().trim();
@@ -281,18 +276,12 @@ public class KHang_KHTourPanel extends JPanel {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    // Variables declaration - do not modify
     private JButton btnLamMoi, btnSua, btnThem, btnXoa;
-
     private JComboBox<String> jComboBox2;
-
     private JLabel jLabel1, jLabel2;
-
     private JPanel jPanel1, jPanel2, jPanel3;
-
     private JScrollPane jScrollPane2;
-
     private JTable jTable2;
-
     private JTextField txtSearch;
 }
