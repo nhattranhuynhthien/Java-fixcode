@@ -10,8 +10,8 @@ public class KMHDBUS {
 
     public KMHDBUS() {
         if (dsKMHD == null) {
-            // dao = new DsKMHD();
-            //khoit tao dsKMHD tu database
+            
+            
             dsKMHD = dao.getDsKMHD();
         }
     }
@@ -35,10 +35,10 @@ public class KMHDBUS {
 
     public boolean themKMHD(KMHDDTO kmhd) {
         if (timKMHD(kmhd)) {
-            return false; // Đã tồn tại, không thêm
+            return false; 
         }
         if (dao.timKMHD(kmhd.getMaKM()) != null) {
-            return false; // Đã tồn tại trong cơ sở dữ liệu, không thêm
+            return false; 
         }
         dsKMHD.add(kmhd);
         return true;
@@ -58,23 +58,23 @@ public class KMHDBUS {
         }
         if(dao.timKMHD(maKM) != null) {
             dao.xoaKMHD(maKM);
-            return true; // Xóa thành công từ cơ sở dữ liệu
+            return true; 
         }
-        return false; // Không tìm thấy, không xóa
+        return false; 
     }
 
     public boolean suaKMHD(KMHDDTO kmhd) {
         for (int i = 0; i < dsKMHD.size(); i++) {
             if (dsKMHD.get(i).getMaKM().equals(kmhd.getMaKM())) {
                 dsKMHD.set(i, kmhd);
-                return true; // Sửa thành công
+                return true; 
             }
         }
         if(dao.timKMHD(kmhd.getMaKM()) != null) {
             dao.suaKMHD(kmhd);
-            return true; // Sửa thành công từ cơ sở dữ liệu
+            return true; 
         }
-        return false; // Không tìm thấy, không sửa
+        return false; 
     }
 
 }

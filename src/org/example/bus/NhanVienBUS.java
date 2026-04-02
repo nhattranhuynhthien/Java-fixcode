@@ -22,7 +22,7 @@ public class NhanVienBUS {
         }
     }
 
-    // Hàm an toàn để lấy danh sách từ các Class khác
+    
     public static ArrayList<NhanVienDTO> getDsNV() {
         if (dsNV == null) {
             dsNV = dataNV.layDanhSachNV();
@@ -39,11 +39,11 @@ public class NhanVienBUS {
 
         for (NhanVienDTO existingNV : dsNV) {
             if (existingNV.getMaNV().equals(nv.getMaNV())) {
-                return; // Đã tồn tại
+                return; 
             }
         }
 
-        // Thêm vào DB trước, thành công mới thêm vào bộ nhớ tạm
+        
         if (dataNV.themNhanVien(nv)) {
             dsNV.add(nv);
         }
@@ -64,7 +64,7 @@ public class NhanVienBUS {
                 return nv;
             }
         }
-        // Fallback: Tìm trong CSDL nếu trên RAM chưa có
+        
         return dataNV.timNhanVienTheoMa(maNV);
     }
 

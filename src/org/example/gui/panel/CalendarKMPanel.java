@@ -41,7 +41,7 @@ public class CalendarKMPanel extends JPanel {
 
         lblMonth = new JLabel("", JLabel.CENTER);
         lblMonth.setFont(new Font("Arial", Font.BOLD, 18));
-        //control
+        
         JPanel controlPanel = new JPanel();
 
         JButton btnToday = new JButton("Today");
@@ -108,7 +108,7 @@ public class CalendarKMPanel extends JPanel {
             jumpToKM(filteredList.get(currentIndex));
         });
 
-        // SEARCH REALTIME
+        
         txtSearch.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { loadCalendar(); }
             public void removeUpdate(DocumentEvent e) { loadCalendar(); }
@@ -138,7 +138,7 @@ public class CalendarKMPanel extends JPanel {
 
         String keyword = normalize(txtSearch.getText().trim());
 
-        // FILTER LIST
+        
         filteredList.clear();
 
         for(CTrinhKMDTO km : listKM){
@@ -168,7 +168,7 @@ public class CalendarKMPanel extends JPanel {
             }
         }
 
-        // AUTO JUMP KHI SEARCH
+        
         if(!filteredList.isEmpty() && !keyword.isEmpty()){
             month = filteredList.get(0).getNgayBD().getMonthValue();
             year = filteredList.get(0).getNgayBD().getYear();
@@ -179,7 +179,7 @@ public class CalendarKMPanel extends JPanel {
 
         lblMonth.setText("Tháng " + month + " / " + year);
 
-        // HEADER THỨ
+        
         String[] days = {"CN","T2","T3","T4","T5","T6","T7"};
         for(String d : days){
             JLabel lbl = new JLabel(d, JLabel.CENTER);
@@ -272,7 +272,7 @@ public class CalendarKMPanel extends JPanel {
 
         panel.add(kmPanel, BorderLayout.CENTER);
 
-        // HIGHLIGHT KM ĐANG CHỌN
+        
         if(currentIndex >= 0 && currentIndex < filteredList.size()){
             CTrinhKMDTO currentKM = filteredList.get(currentIndex);
 

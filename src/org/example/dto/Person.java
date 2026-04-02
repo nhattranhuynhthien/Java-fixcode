@@ -1,15 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package org.example.dto; // Ghi chú: Nếu project của bạn đang dùng package org.example.dto thì nhớ đổi lại nhé
+
+package org.example.dto; 
 
 import java.time.LocalDate;
 
-/**
- *
- * @author Admin
- */
+
 public class Person {
     protected String ho;
     protected String ten;
@@ -68,10 +62,10 @@ public class Person {
         this.ngaySinh = ngaySinh;
     }
 
-    // HÀM MỚI: Ghi đè phương thức toString()
+    
     @Override
     public String toString() {
-        // Trả về Họ và Tên. Ví dụ: "Nguyễn Văn A"
+        
         return this.ho + " " + this.ten;
     }
 }

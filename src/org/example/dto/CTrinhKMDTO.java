@@ -26,7 +26,7 @@ public class CTrinhKMDTO {
 
     @Override
     public String toString() {
-        return this.tenKM; // Hoặc return this.MaKM + " - " + this.tenKM;
+        return this.tenKM; 
     }
     public String getMaKM() {
         return maKM;

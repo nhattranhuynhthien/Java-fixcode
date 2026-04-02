@@ -6,7 +6,7 @@ import org.example.dto._CTietKHTourDTO;
 import java.util.ArrayList;
 
 public class _CTietKHTourBUS {
-    public static ArrayList<_CTietKHTourDTO> lsCTietKHTours; // Chuyển thành static
+    public static ArrayList<_CTietKHTourDTO> lsCTietKHTours; 
     private _CTietKHTourDAO cTietKHTourDAO;
 
     public _CTietKHTourBUS(){
@@ -34,7 +34,7 @@ public class _CTietKHTourBUS {
         if(success) {
             lsCTietKHTours.add(t);
 
-            // ====== ĐỒNG BỘ: Ép load lại Kế Hoạch Tour từ DB để nhận Tổng Chi mới ======
+            
             new _KeHoachTourBUS().docDs();
         }
 
@@ -50,7 +50,7 @@ public class _CTietKHTourBUS {
                     break;
                 }
             }
-            // ====== ĐỒNG BỘ TỔNG CHI ======
+            
             new _KeHoachTourBUS().docDs();
         }
         return success;
@@ -61,7 +61,7 @@ public class _CTietKHTourBUS {
         if(success) {
             lsCTietKHTours.removeIf(ct -> ct.getMaCTietKHTour().equals(maCTietKHTour));
 
-            // ====== ĐỒNG BỘ TỔNG CHI ======
+            
             new _KeHoachTourBUS().docDs();
         }
         return success;
@@ -71,7 +71,7 @@ public class _CTietKHTourBUS {
         if(lsCTietKHTours == null) getAllCTietKHTours();
 
         for (_CTietKHTourDTO ct : lsCTietKHTours){
-            // FIX LỖI NGHIÊM TRỌNG: Dùng getMaCTietKHTour() thay vì getMaKHTour()
+            
             if(ct.getMaCTietKHTour().trim().equalsIgnoreCase(maCTietKHTour)) {
                 return ct;
             }
@@ -95,7 +95,7 @@ public class _CTietKHTourBUS {
         if(lsCTietKHTours == null) getAllCTietKHTours();
 
         for (_CTietKHTourDTO ct : lsCTietKHTours){
-            // FIX LỖI NGHIÊM TRỌNG: Dùng getMaCTietKHTour() thay vì getMaKHTour()
+            
             if(ct.getMaCTietKHTour().trim().equalsIgnoreCase(maCTKHTour))
                 return true;
         }

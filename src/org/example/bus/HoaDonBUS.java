@@ -77,7 +77,7 @@ public class HoaDonBUS {
             return false;
         }
 
-        // KIỂM TRA MÃ KHUYẾN MÃI (Lỗi 3)
+        
         if (hd.getMaKM() != null && !hd.getMaKM().trim().isEmpty() && !hd.getMaKM().equalsIgnoreCase("Không có")) {
             KMHDDAO kmDao = new KMHDDAO();
             KMHDDTO km = kmDao.timKMHD(hd.getMaKM());
@@ -89,7 +89,7 @@ public class HoaDonBUS {
             }
         }
 
-        // KIỂM TRA LOẠI TOUR BỊ ẨN
+        
         _TourDTO tour = null;
         for (_TourDTO t : tourBUS.getAllTours()) {
             if (t.getMaTour().equalsIgnoreCase(kht.getMaTour())) { tour = t; break; }
@@ -151,7 +151,7 @@ public class HoaDonBUS {
 
         _KeHoachTourDTO kht = layKeHoachTourTrucTiep(hdMoi.getMaKHTour());
         if (kht != null) {
-            // KIỂM TRA MÃ KHUYẾN MÃI (Lỗi 3)
+            
             if (hdMoi.getMaKM() != null && !hdMoi.getMaKM().trim().isEmpty() && !hdMoi.getMaKM().equalsIgnoreCase("Không có")) {
                 KMHDDAO kmDao = new KMHDDAO();
                 KMHDDTO km = kmDao.timKMHD(hdMoi.getMaKM());

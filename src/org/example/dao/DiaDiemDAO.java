@@ -79,7 +79,7 @@ public class DiaDiemDAO {
 
 
 
-    // Đã sửa lỗi thiếu dấu ? trong câu SQL
+    
     public ArrayList<DiaDiemDTO> getDstheoDiaChi(String diachi){
         ArrayList<DiaDiemDTO> ds = new ArrayList<>();
         String sql = "Select * from DiaDiem where diachi like ?";
@@ -114,13 +114,13 @@ public class DiaDiemDAO {
         return ds;
     }
 
-    // HÀM MỚI: Tìm kiếm theo Tên Địa Điểm
+    
     public ArrayList<DiaDiemDTO> getDstheoTenDiaDiem(String tenDiaDiem){
         ArrayList<DiaDiemDTO> ds = new ArrayList<>();
         String sql = "Select * from DiaDiem where TenDiaDiem like ?";
         try(Connection conn = _MyConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
-            ps.setNString(1, "%" + tenDiaDiem + "%"); // Dùng setNString để hỗ trợ tìm kiếm Tiếng Việt có dấu
+            ps.setNString(1, "%" + tenDiaDiem + "%"); 
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
                 DiaDiemDTO dd = maptoDiaDiem(rs);

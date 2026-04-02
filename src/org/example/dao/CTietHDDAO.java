@@ -45,7 +45,7 @@ public class CTietHDDAO {
     public CTietHDDTO maptoCthd(ResultSet rs) throws SQLException{
         String MaHD = rs.getString("MaHD");
         String MaKHDi = rs.getString("MaKHang");
-        int GiaVe = rs.getInt("GiaVe");
+        float GiaVe = rs.getFloat("GiaVe");
         return new CTietHDDTO(MaHD, MaKHDi, GiaVe);
     }
 
@@ -70,16 +70,14 @@ public class CTietHDDAO {
         String sqlUpdateCT = "Update cthoadon set giave = giave + ? where mahd=? and makhang=?";
         String sqlInsertCT = "Insert into cthoadon(mahd,makhang,giave) Values(?,?,?)";
 
-        // Truy vấn lấy Kế hoạch tour và thêm khách hàng
         String sqlGetMaKHTour = "SELECT makhtour FROM hoadon WHERE mahd = ?";
         String sqlInsertKHKHTour = "INSERT INTO khang_khtour(MaKHang, MaKHTour, GiaVe) VALUES(?, ?, ?)";
 
         Connection conn = null;
         try {
             conn = _MyConnection.getConnection();
-            conn.setAutoCommit(false); // Bắt đầu Transaction
+            conn.setAutoCommit(false);
 
-            // 1. Lấy mã kế hoạch tour
             String maKHTour = "";
             try(PreparedStatement ps = conn.prepareStatement(sqlGetMaKHTour)){
                 ps.setString(1, ct.getMaHD());
@@ -87,11 +85,10 @@ public class CTietHDDAO {
                 if(rs.next()){
                     maKHTour = rs.getString("makhtour");
                 } else {
-                    return false; // Không tìm thấy HD
+                    return false;
                 }
             }
 
-            // 2. Thêm hoặc cập nhật CTHoaDon
             boolean daTonTai = false;
             try (PreparedStatement ps = conn.prepareStatement(sqlCheckCT)) {
                 ps.setString(1, ct.getMaHD());
@@ -101,6 +98,7 @@ public class CTietHDDAO {
             }
 
             if (daTonTai) {
+                // Đã tồn tại -> Cho phép cộng dồn giá vé (Gộp mua nhiều vé)
                 try (PreparedStatement ps = conn.prepareStatement(sqlUpdateCT)) {
                     ps.setFloat(1, ct.getGiaVe());
                     ps.setString(2, ct.getMaHD());
@@ -108,6 +106,7 @@ public class CTietHDDAO {
                     if (ps.executeUpdate() <= 0) { conn.rollback(); return false; }
                 }
             } else {
+                // Thêm mới hoàn toàn
                 try (PreparedStatement ps = conn.prepareStatement(sqlInsertCT)) {
                     ps.setString(1, ct.getMaHD());
                     ps.setString(2, ct.getMaKHDi());
@@ -116,14 +115,12 @@ public class CTietHDDAO {
                 }
             }
 
-            // 3. Thêm khách đi tour vào danh sách KHang_KHTour
             try (PreparedStatement ps = conn.prepareStatement(sqlInsertKHKHTour)) {
                 ps.setString(1, ct.getMaKHDi());
                 ps.setString(2, maKHTour);
                 ps.setLong(3, (long) ct.getGiaVe());
                 ps.executeUpdate();
             } catch (SQLException e) {
-                // Bỏ qua lỗi nếu hành khách này đã được thêm vào tour từ trước
             }
 
             conn.commit();
@@ -154,7 +151,6 @@ public class CTietHDDAO {
             conn = _MyConnection.getConnection();
             conn.setAutoCommit(false);
 
-            // 1. Lấy mã KHTour
             String maKHTour = "";
             try(PreparedStatement ps = conn.prepareStatement(sqlGetMaKHTour)){
                 ps.setString(1, mahd);
@@ -164,7 +160,6 @@ public class CTietHDDAO {
                 } else return false;
             }
 
-            // 2. Lấy giá hiện tại
             try (PreparedStatement ps = conn.prepareStatement(sqlCheck)) {
                 ps.setString(1, mahd);
                 ps.setString(2, makh);
@@ -173,8 +168,8 @@ public class CTietHDDAO {
                 else return false;
             }
 
-            // 3. Xóa / Cập nhật CTHoaDon
             if (giaHienTai > giaVeGoc) {
+                // Trừ tiền 1 vé nếu khách mua nhiều vé
                 String sqlTruTienCT = "UPDATE cthoadon SET giave = giave - ? WHERE mahd=? AND makhang=?";
                 try (PreparedStatement ps = conn.prepareStatement(sqlTruTienCT)) {
                     ps.setFloat(1, giaVeGoc);
@@ -183,6 +178,7 @@ public class CTietHDDAO {
                     ps.executeUpdate();
                 }
             } else {
+                // Xóa hẳn nếu chỉ còn 1 vé
                 String sqlDelete = "DELETE FROM cthoadon WHERE mahd=? AND makhang=?";
                 try (PreparedStatement ps = conn.prepareStatement(sqlDelete)) {
                     ps.setString(1, mahd);
@@ -190,7 +186,6 @@ public class CTietHDDAO {
                     ps.executeUpdate();
                 }
 
-                // Xóa khách hàng khỏi Kế hoạch tour
                 try (PreparedStatement ps = conn.prepareStatement(sqlDeleteKHKHTour)) {
                     ps.setString(1, makh);
                     ps.setString(2, maKHTour);
@@ -255,15 +250,17 @@ public class CTietHDDAO {
         return ds;
     }
 
-    public boolean suaCthd(CTietHDDTO ct){
-        String sql = "Update cthoadon set giave=? where mahd=? and makhang=?";
+    // Hỗ trợ cập nhật đổi cả Mã Khách Hàng
+    public boolean suaCthd(CTietHDDTO ctMoi, String maKhCung){
+        String sql = "Update cthoadon set makhang=?, giave=? where mahd=? and makhang=?";
         try(Connection conn= _MyConnection.getConnection();
             PreparedStatement ps=conn.prepareStatement(sql)){
-            ps.setFloat(1,ct.getGiaVe() );
-            ps.setString(2, ct.getMaHD());
-            ps.setString(3, ct.getMaKHDi());
+            ps.setString(1, ctMoi.getMaKHDi());
+            ps.setFloat(2, ctMoi.getGiaVe());
+            ps.setString(3, ctMoi.getMaHD());
+            ps.setString(4, maKhCung);
 
-            return ps.executeUpdate()>0;
+            return ps.executeUpdate() > 0;
         }catch(SQLException e){
             e.printStackTrace();
         }

@@ -1,4 +1,3 @@
-
 package org.example.gui.dialog;
 
 import java.awt.*;
@@ -113,7 +112,6 @@ public class NhapCTHD extends JDialog {
         });
         jScrollPane1.setViewportView(tblnhapct);
 
-        // define handle funtion
         luu();
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -148,7 +146,7 @@ public class NhapCTHD extends JDialog {
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
 
@@ -161,34 +159,42 @@ public class NhapCTHD extends JDialog {
                 tblnhapct.getCellEditor().stopCellEditing();
             }
 
+            // KIỂM TRA RỖNG TRƯỚC KHI LƯU
+            for(int i = 0; i < soluong; i++){
+                Object value = model.getValueAt(i, 1);
+                if(value == null || value.toString().trim().isEmpty()){
+                    JOptionPane.showMessageDialog(this, "Vui lòng chọn khách hàng ở dòng số " + (i + 1));
+                    return;
+                }
+            }
+
             boolean loi=false;
             String mahd =model.getValueAt(0, 0).toString().trim();
 
-            bus.capNhatSoluong(soluong,hdbus.timHd(mahd).getMaKHTour());
-            for(int i=0;i<soluong;i++){
-                mahd =model.getValueAt(i, 0).toString().trim();
-                String makh =model.getValueAt(i, 1).toString().trim();
-                float giave= Float.parseFloat(model.getValueAt(i, 2).toString().trim());
-                CTietHDDTO cthd=new CTietHDDTO(mahd,makh,giave);
+            bus.capNhatSoluong(soluong, hdbus.timHd(mahd).getMaKHTour());
+
+            for(int i = 0; i < soluong; i++){
+                mahd = model.getValueAt(i, 0).toString().trim();
+                String makh = model.getValueAt(i, 1).toString().trim();
+                float giave = Float.parseFloat(model.getValueAt(i, 2).toString().trim());
+                CTietHDDTO cthd = new CTietHDDTO(mahd, makh, giave);
+
                 if(!bus.themCTietHd(cthd)){
-                    loi=true;
-                    break;
+                    loi = true;
                 }
             }
             if(!loi){
-                JOptionPane.showMessageDialog(this, "Lưu thành công");
+                JOptionPane.showMessageDialog(this, "Lưu thành công toàn bộ");
                 this.dispose();
             }else{
-                JOptionPane.showMessageDialog(this, "Lỗi");
+                JOptionPane.showMessageDialog(this, "Đã lưu xong, tuy nhiên một số bị bỏ qua do vượt quá số lượng hóa đơn!");
+                this.dispose();
             }
         });
     }
 
-    private void tblnhapctKeyPressed(KeyEvent evt) {
-        // TODO add your handling code here:
-    }
+    private void tblnhapctKeyPressed(KeyEvent evt) {}
 
-    // variables
     private JButton btnluu;
     private JScrollPane jScrollPane1;
     private JTable tblnhapct;

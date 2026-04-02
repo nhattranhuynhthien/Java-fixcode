@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package org.example.helper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,10 +6,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Date;
-/**
- *
- * @author Nhat
- */
+
 public class DateHelper {
     private static final String DEFAULT_FORMAT = "dd/MM/yyyy";
 

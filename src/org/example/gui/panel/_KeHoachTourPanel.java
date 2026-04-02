@@ -102,7 +102,7 @@ public class _KeHoachTourPanel extends JPanel {
 
     private void loadTable(String maTour){
         tableModel.setRowCount(0);
-        // Lấy danh sách kế hoạch theo mã Tour đã chọn
+        
         lsKeHoachTours = keHoachTourBUS.getAllKeHoachToursByID(maTour);
 
         for (_KeHoachTourDTO kt : lsKeHoachTours){
@@ -159,7 +159,7 @@ public class _KeHoachTourPanel extends JPanel {
         _KeHoachTourDialog keHoachTourDialog = new _KeHoachTourDialog(keHoachTourBUS, keHoachTourDTO, selectedTour.getMaTour());
         keHoachTourDialog.setVisible(true);
 
-        // ĐÃ SỬA: Sau khi Dialog đóng (xong việc Thêm/Sửa), nạp lại dữ liệu từ DB vào BUS và vẽ lại bảng
+        
         keHoachTourBUS.docDs();
         loadTable(selectedTour.getMaTour());
     }
@@ -211,13 +211,13 @@ public class _KeHoachTourPanel extends JPanel {
     private void refresh(){
         refreshBtn = createBtn("Làm mới", UIColors.REFRESH);
         refreshBtn.addActionListener(e -> {
-            // 1. Cập nhật lại danh sách Tour trong ComboBox
+            
             cbTour.setModel(CBTourPresent());
 
-            // ĐÃ SỬA: 2. Gọi hàm nạp lại toàn bộ dữ liệu từ Database vào lớp BUS
+            
             keHoachTourBUS.docDs();
 
-            // 3. Hiển thị lại bảng theo Tour đang chọn
+            
             _TourDTO selectedTour = (_TourDTO) cbTour.getSelectedItem();
             if(selectedTour != null){
                 loadTable(selectedTour.getMaTour());

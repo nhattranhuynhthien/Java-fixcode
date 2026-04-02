@@ -12,19 +12,19 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class _LoaiTourPanel extends JPanel {
-    // txt field
+    
     private JTextField txtSearch;
 
-    // define panel
+    
     private JPanel northPanel, southPanel, searchPanel;
 
-    // relate to table
+    
     private JTable table;
     private JScrollPane scrollPane;
     private DefaultTableModel tableModel;
     private TableRowSorter<DefaultTableModel> rowSorter;
 
-    // define btn
+    
     private JButton addBtn, deleteBtn, editBtn, refreshBtn;
 
     private ArrayList<_LoaiTourDTO> lsLoaiTour;
@@ -40,16 +40,16 @@ public class _LoaiTourPanel extends JPanel {
     public void init(){
         setLayout(new BorderLayout());
 
-        //North Panel
+        
         northPanel = new JPanel(new BorderLayout());
         JLabel lblTitle = new JLabel("QUẢN LÝ LOẠI TOUR", JLabel.CENTER);
         lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
         northPanel.add(lblTitle, BorderLayout.NORTH);
 
-        // Search panel
+        
         searchPanel = new JPanel();
 
-        // titleBorder
+        
         TitledBorder titleSearch = BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.CYAN, 2), " TÌM KIẾM LOẠI TOUR "
         );
@@ -61,10 +61,10 @@ public class _LoaiTourPanel extends JPanel {
         );
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Khoảng cách giữa các ô
+        gbc.insets = new Insets(10, 10, 10, 10); 
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // column 1 : type label
+        
         gbc.gridx = 0; gbc.gridy = 0;
         searchPanel.add(new JLabel("Tìm kiếm theo thể loại:"), gbc);
 
@@ -75,16 +75,16 @@ public class _LoaiTourPanel extends JPanel {
 
         northPanel.add(searchPanel, BorderLayout.CENTER);
 
-        // init table
+        
         initTable();
 
-        //South Panel
+        
         southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-        add(); // add button
+        add(); 
         southPanel.add(addBtn);
-        delete(); // delete button
+        delete(); 
         southPanel.add(deleteBtn);
-        edit(); // edit button
+        edit(); 
         southPanel.add(editBtn);
         refresh();
         southPanel.add(refreshBtn);
@@ -95,7 +95,7 @@ public class _LoaiTourPanel extends JPanel {
     }
 
     public void initTable(){
-        // columns of table
+        
         String[] columns = {"Mã loại tour", "Thể loại", "Mô tả", "Trạng thái"};
 
         tableModel = new DefaultTableModel(columns, 0);
@@ -135,7 +135,7 @@ public class _LoaiTourPanel extends JPanel {
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
 
         btn.setContentAreaFilled(true);
         btn.setOpaque(true);

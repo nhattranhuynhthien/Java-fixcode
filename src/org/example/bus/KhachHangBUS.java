@@ -23,7 +23,7 @@ public class KhachHangBUS {
         }
     }
 
-    // Hàm an toàn để lấy danh sách từ các Class khác
+    
     public static ArrayList<KhachHangDTO> getDsKH() {
         if(dsKH == null) {
             dsKH = dataKH.layDanhSachKHang();

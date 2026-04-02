@@ -38,7 +38,7 @@ public class CTrinhKMDialog extends JDialog {
             @Override
             public boolean verify(JComponent input) {
                 String ma = txtMaCTKM.getText().trim();
-                if (isEdit) return true; // Không kiểm tra khi sửa
+                if (isEdit) return true; 
                 if (!ma.matches("^KM\\d{2}$")) {
                     JOptionPane.showMessageDialog(CTrinhKMDialog.this, "Mã phải có định dạng KMxx (x là số)");
                     return false;
@@ -142,17 +142,17 @@ public class CTrinhKMDialog extends JDialog {
         this.bus = bus;
         isEdit = true;
         txtMaCTKM.setText(ct.getMaKM());
-        txtMaCTKM.setEnabled(false);   // khóa sửa mã
+        txtMaCTKM.setEnabled(false);   
         txtTenctkm.setText(ct.getTenKM());
         txtNgayBD.setDate(ct.getNgayBD() != null ? java.sql.Date.valueOf(ct.getNgayBD()) : null);
         txtNgayKT.setDate(ct.getNgayKT() != null ? java.sql.Date.valueOf(ct.getNgayKT()) : null);
-        if (ct.getHinhThucKM()) {          // KMHD
+        if (ct.getHinhThucKM()) {          
             rdoHd.setSelected(true);
             card.show(pnlSwitch, "card2");
             if (ct instanceof KMHDDTO) {
                 txtDieukienapdung.setText(String.valueOf(((KMHDDTO) ct).getTongTienApDung()));
             }
-        } else {                           // KMTour
+        } else {                           
             rdoTour.setSelected(true);
             loadTourTable();
             card.show(pnlSwitch, "card3");
@@ -211,7 +211,7 @@ public class CTrinhKMDialog extends JDialog {
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         return btn;
     }
@@ -252,7 +252,7 @@ public class CTrinhKMDialog extends JDialog {
                     ct = new KMTourDTO(
                             ma, ten, ngayBD, ngayKT, false, chietkhau, ghichu, dsTour
                     );
-                } else { // KM Hóa đơn
+                } else { 
                     float dieuKien = Float.parseFloat(txtDieukienapdung.getText().trim());
                     ct = new KMHDDTO(
                             ma, ten, ngayBD, ngayKT, true, chietkhau, ghichu,  dieuKien
@@ -377,14 +377,14 @@ public class CTrinhKMDialog extends JDialog {
         txtGhichu.addActionListener(this::txtGhichuActionPerformed);
 
 
-        // define function
+        
         handleSave();
         handleReset();
         handleCancel();
 
         pnlSwitch.setLayout(new CardLayout());
 
-        jLabel8.setFont(new Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel8.setFont(new Font("Segoe UI", 0, 14)); 
         jLabel8.setText("Tổng tiền áp dụng tối thiểu:");
 
         txtDieukienapdung.addActionListener(this::txtDieukienapdungActionPerformed);
@@ -415,7 +415,7 @@ public class CTrinhKMDialog extends JDialog {
 
         pnlSwitch.add(HOADON, "card2");
 
-        jLabel9.setFont(new Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel9.setFont(new Font("Segoe UI", 0, 14)); 
         jLabel9.setText("Danh sách tour áp dụng");
 
         tblTour.setModel(new DefaultTableModel(
@@ -551,7 +551,7 @@ public class CTrinhKMDialog extends JDialog {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     public void loadTourTable() {
         DefaultTableModel model = (DefaultTableModel) tblTour.getModel();
@@ -562,7 +562,7 @@ public class CTrinhKMDialog extends JDialog {
 
         for (_TourDTO t : list) {
             model.addRow(new Object[]{
-                    false,                 // checkbox chọn tour
+                    false,                 
                     t.getMaTour(),
                     t.getTen(),
                     t.getSoNgay(),
@@ -595,88 +595,88 @@ public class CTrinhKMDialog extends JDialog {
         }
     }
 
-    private void closeDialog(WindowEvent evt) {//GEN-FIRST:event_closeDialog
+    private void closeDialog(WindowEvent evt) {
         setVisible(false);
         dispose();
-    }//GEN-LAST:event_closeDialog
-
-    private void txtMaCTKMActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtMaCTKMActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMaCTKMActionPerformed
-
-    private void txtTenctkmActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtTenctkmActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTenctkmActionPerformed
-
-    private void txtNgayBDActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtNgayBDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNgayBDActionPerformed
-
-    private void txtNgayKTActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtNgayKTActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNgayKTActionPerformed
-
-    private void txtChietkhauActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtChietkhauActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtChietkhauActionPerformed
-
-    private void txtGhichuActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtGhichuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtGhichuActionPerformed
-
-    private void txtMaCTKMInputMethodTextChanged(InputMethodEvent evt) {//GEN-FIRST:event_txtMaCTKMInputMethodTextChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMaCTKMInputMethodTextChanged
-
-    private void txtTenctkmInputMethodTextChanged(InputMethodEvent evt) {//GEN-FIRST:event_txtTenctkmInputMethodTextChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTenctkmInputMethodTextChanged
-
-    private void txtNgayBDInputMethodTextChanged(InputMethodEvent evt) {//GEN-FIRST:event_txtNgayBDInputMethodTextChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNgayBDInputMethodTextChanged
-
-    private void txtNgayKTInputMethodTextChanged(InputMethodEvent evt) {//GEN-FIRST:event_txtNgayKTInputMethodTextChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNgayKTInputMethodTextChanged
-
-    private void txtChietkhauInputMethodTextChanged(InputMethodEvent evt) {//GEN-FIRST:event_txtChietkhauInputMethodTextChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtChietkhauInputMethodTextChanged
-
-    private void txtGhichuInputMethodTextChanged(InputMethodEvent evt) {//GEN-FIRST:event_txtGhichuInputMethodTextChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtGhichuInputMethodTextChanged
-
-    private void jRadioButton1ActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
     }
 
-    private void rdoHdActionPerformed(ActionEvent evt) {//GEN-FIRST:event_rdoHdActionPerformed
-        // TODO add your handling code here:
+    private void txtMaCTKMActionPerformed(ActionEvent evt) {
+        
+    }
+
+    private void txtTenctkmActionPerformed(ActionEvent evt) {
+        
+    }
+
+    private void txtNgayBDActionPerformed(ActionEvent evt) {
+        
+    }
+
+    private void txtNgayKTActionPerformed(ActionEvent evt) {
+        
+    }
+
+    private void txtChietkhauActionPerformed(ActionEvent evt) {
+        
+    }
+
+    private void txtGhichuActionPerformed(ActionEvent evt) {
+        
+    }
+
+    private void txtMaCTKMInputMethodTextChanged(InputMethodEvent evt) {
+        
+    }
+
+    private void txtTenctkmInputMethodTextChanged(InputMethodEvent evt) {
+        
+    }
+
+    private void txtNgayBDInputMethodTextChanged(InputMethodEvent evt) {
+        
+    }
+
+    private void txtNgayKTInputMethodTextChanged(InputMethodEvent evt) {
+        
+    }
+
+    private void txtChietkhauInputMethodTextChanged(InputMethodEvent evt) {
+        
+    }
+
+    private void txtGhichuInputMethodTextChanged(InputMethodEvent evt) {
+        
+    }
+
+    private void jRadioButton1ActionPerformed(ActionEvent evt) {
+        
+    }
+
+    private void rdoHdActionPerformed(ActionEvent evt) {
+        
         rdoHd.setSelected(true);
         card.show(pnlSwitch, "card2");
         JOptionPane.showMessageDialog(this, "Bạn đã chọn hình thức khuyến mãi hóa đơn");
-    }//GEN-LAST:event_rdoHdActionPerformed
+    }
 
-    private void rdoTourActionPerformed(ActionEvent evt) {//GEN-FIRST:event_rdoTourActionPerformed
-        // TODO add your handling code here:
+    private void rdoTourActionPerformed(ActionEvent evt) {
+        
         rdoTour.setSelected(true);
         card.show(pnlSwitch, "card3");
         loadTourTable();
         JOptionPane.showMessageDialog(this, "Bạn đã chọn hình thức khuyến mãi tour");
 
-    }//GEN-LAST:event_rdoTourActionPerformed
+    }
 
-    private void btnHinhthucStateChanged(ChangeEvent evt) {//GEN-FIRST:event_btnHinhthucStateChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnHinhthucStateChanged
+    private void btnHinhthucStateChanged(ChangeEvent evt) {
+        
+    }
 
-    private void txtDieukienapdungActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtDieukienapdungActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDieukienapdungActionPerformed
+    private void txtDieukienapdungActionPerformed(ActionEvent evt) {
+        
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    
     private JPanel HOADON, pnlSwitch, TOUR;
 
     private JButton btnHuy, btnLuu, btnReset;

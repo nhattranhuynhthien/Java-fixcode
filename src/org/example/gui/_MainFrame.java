@@ -11,12 +11,12 @@ import javax.swing.*;
 import org.example.login.DangNhap;
 
 public class _MainFrame extends JFrame {
-    //layout
+    
     private CardLayout cardLayout;
     private JPanel contentArea;
     private JButton activeButton;
     public _MainFrame(TaiKhoanDTO taiKhoanDangNhap) {
-        // Set favicon
+        
         try {
             ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("resources/logosgu.png"));
             setIconImage(icon.getImage());
@@ -41,7 +41,7 @@ public class _MainFrame extends JFrame {
         sidebar.setPreferredSize(new Dimension(240, 0));
         sidebar.setLayout(new BoxLayout(sidebar, BoxLayout.Y_AXIS));
 
-        //menu items: label, cardName
+        
         String[][] menus;
         if (PhanQuyen.laQuanLy()) {
             menus = new String[][]{
@@ -137,14 +137,14 @@ public class _MainFrame extends JFrame {
         btn.setBorder(BorderFactory.createEmptyBorder(0, 24, 0, 0));
 
         btn.addActionListener(e -> {
-            if(activeButton != null) // fix color painted
+            if(activeButton != null) 
                 activeButton.repaint();
 
             activeButton = btn;
             btn.repaint();
             cardLayout.show(contentArea, card);
 
-            if(card != null) { // nếu card null (nút đăng xuất) sẽ là nút bình thường không show ra như những nút khác
+            if(card != null) { 
                 cardLayout.show(contentArea, card);
             }
         });

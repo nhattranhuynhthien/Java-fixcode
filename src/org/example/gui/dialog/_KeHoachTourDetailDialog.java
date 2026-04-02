@@ -12,12 +12,12 @@ import java.util.ArrayList;
 public class _KeHoachTourDetailDialog extends JDialog {
     private String maKHTour;
 
-    // relate to table
+    
     private DefaultTableModel tableModel;
     private JTable table;
     private JScrollPane scrollPane;
 
-    // define btn
+    
     private JButton addBtn, deleteBtn, editBtn, refreshBtn;
 
     private _CTietKHTourBUS cTietKHTourBUS;
@@ -38,15 +38,15 @@ public class _KeHoachTourDetailDialog extends JDialog {
 
     private void init(){
         setLayout(new BorderLayout());
-        initTable(); // init table here
+        initTable(); 
 
-        //South Panel
+        
         JPanel southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
-        add(); // add button
+        add(); 
         southPanel.add(addBtn);
-        delete(); // delete button
+        delete(); 
         southPanel.add(deleteBtn);
-        edit(); // edit button
+        edit(); 
         southPanel.add(editBtn);
         refresh();
         southPanel.add(refreshBtn);
@@ -91,7 +91,7 @@ public class _KeHoachTourDetailDialog extends JDialog {
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
 
         btn.setContentAreaFilled(true);
         btn.setOpaque(true);
@@ -102,7 +102,7 @@ public class _KeHoachTourDetailDialog extends JDialog {
 
     private void add(){
         addBtn = createBtn("Thêm chi tiết kế hoạch Tour", Color.GREEN);
-        addBtn.addActionListener(e -> openDiaLog(null)); // null là ở chế độ thêm, có đối tượng DTO là ở dạng sửa
+        addBtn.addActionListener(e -> openDiaLog(null)); 
     }
 
     private void openDiaLog(_CTietKHTourDTO cTietKHTourDTO){
@@ -111,7 +111,7 @@ public class _KeHoachTourDetailDialog extends JDialog {
         loadTable(maKHTour);
     }
 
-    // delete button
+    
     private void delete(){
         deleteBtn = createBtn("Xóa chi tiết kế hoạch tour", Color.RED);
         deleteBtn.setEnabled(false);
@@ -136,7 +136,7 @@ public class _KeHoachTourDetailDialog extends JDialog {
         });
     }
 
-    // edit button
+    
     private void edit(){
         editBtn = createBtn("Chỉnh sửa", UIColors.EDIT);
         editBtn.setEnabled(false);
@@ -152,7 +152,7 @@ public class _KeHoachTourDetailDialog extends JDialog {
         });
     }
 
-    // refresh button
+    
     private void refresh(){
         refreshBtn = createBtn("Làm mới", UIColors.SAVE);
         refreshBtn.addActionListener(e -> {

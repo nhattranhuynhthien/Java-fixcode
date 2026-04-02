@@ -44,7 +44,6 @@ public class CTHoaDonBUS {
         return null;
     }
 
-    // ====== HÀM MỚI: Đồng bộ tổng tiền về Hóa đơn gốc (Lỗi 2) ======
     private void dongBoTienHoaDon(String maHD) {
         float tongTienMoi = 0;
         ArrayList<CTietHDDTO> list = getDstheoma(maHD);
@@ -55,27 +54,44 @@ public class CTHoaDonBUS {
         HoaDonDTO hd = hdDao.timHoaDon(maHD);
         if (hd != null) {
             hd.setTongTien((int) tongTienMoi);
-            hdDao.suaHd(hd); // Cập nhật thẳng vào DB
-            new HoaDonBUS().docDs(); // Ép Hóa Đơn BUS tải lại dữ liệu mới
-            hdDao.dongBoDoanhThuKeHoachTour(hd.getMaKHTour()); // Kéo theo đồng bộ KHTour
+            hdDao.suaHd(hd);
+            new HoaDonBUS().docDs();
+            hdDao.dongBoDoanhThuKeHoachTour(hd.getMaKHTour());
         }
     }
 
     public boolean themCTietHd(CTietHDDTO ct){
-        // ====== KIỂM TRA SỐ LƯỢNG NGƯỜI TỐI ĐA (Lỗi 1) ======
         HoaDonBUS hdBus = new HoaDonBUS();
         HoaDonDTO hd = hdBus.timHd(ct.getMaHD());
-        if (hd != null) {
+        float giaVeGoc = layGia(ct.getMaHD());
+
+        // KIỂM TRA SỐ LƯỢNG NGƯỜI QUA TỔNG TIỀN (Cho phép mua nhiều vé/người)
+        if (hd != null && giaVeGoc > 0) {
+            int tongSoVeHienTai = 0;
             ArrayList<CTietHDDTO> danhSachHienTai = getDstheoma(ct.getMaHD());
-            if (danhSachHienTai.size() >= hd.getSoLuong()) {
-                JOptionPane.showMessageDialog(null, "Lỗi: Hóa đơn này chỉ được phép nhập tên cho tối đa " + hd.getSoLuong() + " hành khách!\nĐể thêm người, vui lòng sửa lại số lượng bên bảng Hóa Đơn.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
-                return false; // Chặn thêm
+            for (CTietHDDTO c : danhSachHienTai) {
+                tongSoVeHienTai += Math.round(c.getGiaVe() / giaVeGoc);
+            }
+
+            if (tongSoVeHienTai >= hd.getSoLuong()) {
+                JOptionPane.showMessageDialog(null, "Lỗi: Hóa đơn này đã đủ " + hd.getSoLuong() + " vé!\nKhông thể thêm hành khách.", "Cảnh báo", JOptionPane.WARNING_MESSAGE);
+                return false;
             }
         }
 
         if(dao.themCtietHD(ct)){
-            ds.add(ct);
-            dongBoTienHoaDon(ct.getMaHD()); // Đồng bộ tiền lên Hóa Đơn
+            boolean isUpdated = false;
+            for(CTietHDDTO c : ds){
+                if(c.getMaHD().equals(ct.getMaHD()) && c.getMaKHDi().equals(ct.getMaKHDi())){
+                    c.setGiaVe(c.getGiaVe() + ct.getGiaVe()); // Cập nhật cộng dồn trên RAM
+                    isUpdated = true;
+                    break;
+                }
+            }
+            if(!isUpdated){
+                ds.add(ct);
+            }
+            dongBoTienHoaDon(ct.getMaHD());
             return true;
         }
         return false;
@@ -85,35 +101,40 @@ public class CTHoaDonBUS {
         CTietHDDTO ct = timCt(mact, makh);
         if (ct == null) return false;
 
+        float giaVeGoc = layGia(mact);
+
         if(dao.xoaCtietHd(mact, makh)) {
-            ds.remove(ct);
-            dongBoTienHoaDon(mact); // Đồng bộ trừ tiền
+            if (ct.getGiaVe() > giaVeGoc) {
+                ct.setGiaVe(ct.getGiaVe() - giaVeGoc); // Giảm trừ tiền từ từ trên RAM
+            } else {
+                ds.remove(ct); // Tiền đã cạn -> Xóa
+            }
+            dongBoTienHoaDon(mact);
             return true;
         }
         return false;
     }
 
-    public boolean suaCtiethd(CTietHDDTO ct){
+    public boolean suaCtiethd(CTietHDDTO ct, String maKhCung){
         boolean flag = false;
-        if(!timCtiethd(ct))
-            flag = false;
-        else {
-            flag = true;
-            for(int i=0;i<ds.size();i++){
-                if(ds.get(i).getMaHD().equals(ct.getMaHD()) && ds.get(i).getMaKHDi().equals(ct.getMaKHDi())){
-                    ds.set(i,ct);
-                    flag=true;
-                }
-            }
-        }
-        if(dao.TimHD(ct.getMaHD())==null) {
-            flag=false;
-        } else {
-            if (dao.suaCthd(ct)) {
-                dongBoTienHoaDon(ct.getMaHD()); // Đồng bộ tiền lại nếu giá vé bị sửa đổi
+
+        for(int i = 0; i < ds.size(); i++){
+            if(ds.get(i).getMaHD().equals(ct.getMaHD()) && ds.get(i).getMaKHDi().equals(maKhCung)){
+                ds.set(i, ct);
+                flag = true;
+                break;
             }
         }
 
+        if(dao.TimHD(ct.getMaHD()) == null) {
+            flag = false;
+        } else {
+            if (dao.suaCthd(ct, maKhCung)) {
+                dongBoTienHoaDon(ct.getMaHD());
+            } else {
+                flag = false;
+            }
+        }
         return flag;
     }
 

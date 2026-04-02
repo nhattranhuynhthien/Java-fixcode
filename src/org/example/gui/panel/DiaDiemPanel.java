@@ -73,7 +73,7 @@ public class DiaDiemPanel extends JPanel {
 
         pnlheader.setLayout(new BorderLayout());
 
-        lbname.setFont(new Font("Arial", 0, 18)); // NOI18N
+        lbname.setFont(new Font("Arial", 0, 18)); 
         lbname.setHorizontalAlignment(SwingConstants.CENTER);
         lbname.setText("Quản lý địa điểm");
         pnlheader.add(lbname, BorderLayout.CENTER);
@@ -136,7 +136,7 @@ public class DiaDiemPanel extends JPanel {
                 }
         ));
         tbldd.setPreferredSize(null);
-        tbldd.addMouseListener(new MouseAdapter() { // when click row of table
+        tbldd.addMouseListener(new MouseAdapter() { 
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (tbldd.getSelectedRow() != -1) {
@@ -150,14 +150,14 @@ public class DiaDiemPanel extends JPanel {
         pnltable.add(jScrollPane2, BorderLayout.CENTER);
 
         add(pnltable, BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private JButton createBtn(String text, Color color){
         JButton btn = new JButton(text);
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         return btn;
     }
@@ -210,7 +210,7 @@ public class DiaDiemPanel extends JPanel {
                     }
                 }
                 loadData();
-            }else{ // row == -1
+            }else{ 
                 JOptionPane.showMessageDialog(this, "Vui lòng chọn địa điểm cần xóa");
             }
         });
@@ -231,13 +231,13 @@ public class DiaDiemPanel extends JPanel {
     }
 
     private void txtTenDdKeyReleased(KeyEvent evt) {
-        // TODO add your handling code here:
+        
         String ten = txttendd.getText().trim();
         loadData( ten);
     }
 
     private void cbTimItemStateChanged(ItemEvent evt) {
-        // TODO add your handling code here:
+        
         String chose=cbtim.getSelectedItem().toString().trim();
         if(chose.equals("Ngày thực hiện")){
             txttendd.setVisible(false);
@@ -251,7 +251,7 @@ public class DiaDiemPanel extends JPanel {
 
 
 
-    // define variables
+    
     private JButton btnreset, btnsua, btnthem, btnxoa, btnxuat;
 
     private JComboBox<String> cbtim;

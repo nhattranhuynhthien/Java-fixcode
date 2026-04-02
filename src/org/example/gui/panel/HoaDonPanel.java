@@ -6,7 +6,7 @@ import org.example.bus.*;
 import org.example.gui.dialog.*;
 import org.example.helper.DateHelper;
 import org.example.helper.ExcelHelper;
-import org.example.helper.PDFHelper; // Import PDFHelper
+import org.example.helper.PDFHelper; 
 
 import java.awt.*;
 import java.awt.event.*;
@@ -80,7 +80,7 @@ public class HoaDonPanel extends JPanel {
         btnchitiet = new JButton();
         btnreset = new JButton();
         btnxuat = new JButton();
-        btnxuatpdf = new JButton(); // Khởi tạo biến nút PDF
+        btnxuatpdf = new JButton(); 
         pnltable = new JPanel();
         jScrollPane1 = new JScrollPane();
         tblhoadon = new JTable();
@@ -89,7 +89,7 @@ public class HoaDonPanel extends JPanel {
 
         pnlheader.setLayout(new BorderLayout());
 
-        lbname.setFont(new Font("Arial", 0, 18)); // NOI18N
+        lbname.setFont(new Font("Arial", 0, 18)); 
         lbname.setHorizontalAlignment(SwingConstants.CENTER);
         lbname.setText("Quản lý hóa đơn");
         pnlheader.add(lbname, BorderLayout.CENTER);
@@ -153,7 +153,7 @@ public class HoaDonPanel extends JPanel {
         xuatExcel();
         pnlfooter.add(btnxuat);
 
-        // Gọi hàm xuất PDF và add vào footer
+        
         xuatPDF();
         pnlfooter.add(btnxuatpdf);
 
@@ -210,7 +210,7 @@ public class HoaDonPanel extends JPanel {
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
 
         btn.setContentAreaFilled(true);
         btn.setOpaque(true);
@@ -312,7 +312,7 @@ public class HoaDonPanel extends JPanel {
         });
     }
 
-    // HÀM MỚI: Khởi tạo sự kiện xuất PDF
+    
     private void xuatPDF(){
         btnxuatpdf = createBtn("Xuất PDF", new Color(244, 67, 54));
         btnxuatpdf.addActionListener(v -> {
@@ -321,18 +321,18 @@ public class HoaDonPanel extends JPanel {
     }
 
     private void txttimActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
+        
     }
 
     private void txttimKeyReleased(KeyEvent evt) {
-        // TODO add your handling code here:
+        
         String text=txttim.getText().trim();
         String loai =cbtim.getSelectedItem().toString().trim();
         loadData(loai, text);
     }
 
     private void cbtimItemStateChanged(ItemEvent evt) {
-        // TODO add your handling code here:
+        
         String item=cbtim.getSelectedItem().toString();
         if(item.equals("Ngày")){
             txttim.setVisible(false);
@@ -344,17 +344,17 @@ public class HoaDonPanel extends JPanel {
     }
 
     private void txtdayKeyReleased(KeyEvent evt) {
-        // TODO add your handling code here:
+        
     }
 
     private void txtdayPropertyChange(java.beans.PropertyChangeEvent evt) {
-        // TODO add your handling code here:
+        
         java.util.Date ngay = txtday.getDate();
         loadData(ngay);
     }
 
     private void tblhoadonMouseClicked(MouseEvent evt) {
-        // TODO add your handling code here:
+        
         int row=tblhoadon.getSelectedRow();
         String ma =tblhoadon.getValueAt(row, 0).toString().trim();
         if(row!=-1){

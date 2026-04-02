@@ -126,7 +126,7 @@ public class CTrinhKMDAO {
             case "Tên KM":
                 sql += " AND tenKM LIKE ?";
                 break;
-            // Thêm các trường khác nếu cần
+            
         }
         try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

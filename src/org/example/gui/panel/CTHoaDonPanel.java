@@ -1,4 +1,3 @@
-
 package org.example.gui.panel;
 
 import org.example.gui.dialog.CTHoaDonDialog;
@@ -73,7 +72,6 @@ public class CTHoaDonPanel extends JPanel {
                     cthd.getMaHD(),cthd.getMaKHDi(),String.format("%.0f", cthd.getGiaVe())
             });
         }
-
     }
 
     private void loaddata(ArrayList<CTietHDDTO> ds){
@@ -109,7 +107,6 @@ public class CTHoaDonPanel extends JPanel {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         pnlheader = new JPanel();
@@ -209,7 +206,7 @@ public class CTHoaDonPanel extends JPanel {
         pnlfooter.add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
         add(pnlfooter, java.awt.BorderLayout.CENTER);
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private JButton createBtn(String text, Color color){
         JButton btn = new JButton(text);
@@ -218,11 +215,9 @@ public class CTHoaDonPanel extends JPanel {
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
         btn.setContentAreaFilled(true);
         btn.setOpaque(true);
         btn.setBorderPainted(false);
-
         return btn;
     }
 
@@ -249,20 +244,25 @@ public class CTHoaDonPanel extends JPanel {
             String mahd =model.getValueAt(row, 0).toString();
             String makh =model.getValueAt(row, 1).toString();
 
-            if(JOptionPane.showConfirmDialog(this, "Xóa vé này?","Xác nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
+            if(JOptionPane.showConfirmDialog(this, "Xóa 1 vé của khách hàng này?","Xác nhận",JOptionPane.YES_NO_OPTION)==JOptionPane.YES_OPTION){
                 if(bus.xoaCtietHd(mahd,makh)){
-                    model.removeRow(row);
-                    JOptionPane.showMessageDialog(this, "Xóa thành công");
+
+                    // TẢI LẠI BẢNG NGAY SAU KHI XÓA
+                    if (soluongcanxoa > 0 || !btnthem.isVisible()) {
+                        loadchitiet(mahd);
+                    } else {
+                        loaddata();
+                    }
+
+                    JOptionPane.showMessageDialog(this, "Đã hủy 1 vé thành công");
 
                     if(soluongcanxoa>0){
                         soluongcanxoa--;
                         if(soluongcanxoa>0){
                             lbname.setText("Cần xóa thêm "+soluongcanxoa+" VÉ");
-
                         }else{
                             lbname.setText("Đã xóa đủ");
                             btnxoa.setVisible(false);
-
                         }
                     }
                 }
@@ -284,6 +284,13 @@ public class CTHoaDonPanel extends JPanel {
                 CTHoaDonDialog ctpn = new CTHoaDonDialog(ct);
                 ctpn.setModal(true);
                 ctpn.setVisible(true);
+
+                // Tải lại bảng sau khi sửa
+                if (!btnthem.isVisible()) {
+                    loadchitiet(mact);
+                } else {
+                    loaddata();
+                }
             }
         });
     }
@@ -303,18 +310,14 @@ public class CTHoaDonPanel extends JPanel {
     }
 
     private void txttimKeyReleased(KeyEvent evt) {
-        // TODO add your handling code here:
         String tim=lbname.getText().trim();
         String loai=cbtim.getSelectedItem().toString().trim();
         loaddata(bus.timNangcao(loai, tim));
     }
 
-    private void txttimActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
-    }
+    private void txttimActionPerformed(ActionEvent evt) {}
 
     private void tblcthdMouseClicked(MouseEvent evt) {
-        // TODO add your handling code here:
         int row=tblcthd.getSelectedRow();
         if(row!=-1){
             btnsua.setEnabled(true);
@@ -325,7 +328,6 @@ public class CTHoaDonPanel extends JPanel {
             }
         }
     }
-
 
     private JButton btnreset;
     private JButton btnsua;

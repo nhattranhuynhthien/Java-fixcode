@@ -10,7 +10,7 @@ public class KHang_KHTourBUS {
     static KHang_KHTourDAO dataKHKHTour = new KHang_KHTourDAO();
 
     public KHang_KHTourBUS() {
-        // Tự động đọc dữ liệu lên khi khởi tạo BUS để mảng không bị null
+        
         docDSKHKHTour();
     }
 
@@ -48,9 +48,9 @@ public class KHang_KHTourBUS {
 
     public void xoaKHang_KHTour(String maKHTour, String maKHang) {
         try {
-            // Luôn gọi DAO để xóa dòng dưới Database
+            
             dataKHKHTour.xoaKHang_KHTour(maKHTour, maKHang);
-            // Cập nhật lại list trên bộ nhớ
+            
             if (dsKHKHTour != null) {
                 dsKHKHTour.removeIf(kht -> kht.getMaKHTour().equals(maKHTour) && kht.getMaKHang().equals(maKHang));
             }
@@ -96,7 +96,7 @@ public class KHang_KHTourBUS {
         }
     }
 
-    // Bổ sung thêm hàm tìm chính xác theo Cả mã Tour và mã Khách
+    
     public KHang_KHTourDTO timKiemChinhXac(String maKHTour, String maKHang) {
         try {
             if (dsKHKHTour == null) return null;
@@ -117,7 +117,7 @@ public class KHang_KHTourBUS {
                 return new ArrayList<>();
             }
 
-            // BỔ SUNG FIX LOGIC: Nếu tìm Họ hoặc Tên thì móc thẳng vào hàm DAO có sẵn
+            
             if (column.equals("Ho")) {
                 return dataKHKHTour.timKHang_KHToursTheoHo(value);
             }
@@ -145,7 +145,7 @@ public class KHang_KHTourBUS {
                                 result.add(kht);
                             }
                         } catch (NumberFormatException e) {
-                            // Bỏ qua lỗi format
+                            
                         }
                         break;
                     default:

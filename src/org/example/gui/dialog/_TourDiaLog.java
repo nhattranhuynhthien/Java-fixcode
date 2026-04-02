@@ -58,50 +58,50 @@ public class _TourDiaLog extends JDialog {
         cancel();
         southPanel.add(cancelBtn);
 
-        //row maTour
+        
         jlbMaTour = new JLabel("Mã tour");
         jlbMaTour.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbMaTour);
         txtMaTour = new JTextField();
         formPanel.add(txtMaTour);
 
-        // row ten
+        
         jlbTen = new JLabel("Tên");
         jlbTen.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbTen);
         txtTen = new JTextField();
         formPanel.add(txtTen);
 
-        //row soNgay
+        
         jlbSoNgay = new JLabel("Số ngày");
         jlbSoNgay.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbSoNgay);
         txtSoNgay = new JTextField();
         formPanel.add(txtSoNgay);
 
-        // row donGia
+        
         jlbDonGia = new JLabel("Đơn giá");
         jlbDonGia.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbDonGia);
         txtDonGia = new JTextField();
         formPanel.add(txtDonGia);
 
-        //row soNguoi
+        
         jlbSoCho = new JLabel("Số chỗ");
         jlbSoCho.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbSoCho);
         txtSoCho = new JTextField();
         formPanel.add(txtSoCho);
 
-        // row ddkhoihanh
+        
         jlbDiaDiemKhoiHanh = new JLabel("Địa điểm khởi hành");
         jlbDiaDiemKhoiHanh.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbDiaDiemKhoiHanh);
         txtDiaDiemKhoiHanh = new JTextField();
-        txtDiaDiemKhoiHanh.setEnabled(false); // Nên khóa lại để người dùng chọn qua Combobox Địa Điểm
+        txtDiaDiemKhoiHanh.setEnabled(false); 
         formPanel.add(txtDiaDiemKhoiHanh);
 
-        // row maLoaiTour
+        
         jlbMaLoaiTour = new JLabel("Mã loại tour");
         jlbMaLoaiTour.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbMaLoaiTour);
@@ -116,11 +116,11 @@ public class _TourDiaLog extends JDialog {
         cbLoaiTours.setModel(loaiToursModel);
         formPanel.add(cbLoaiTours);
 
-        // row image
+        
         jlbImgLink = new JLabel(" Đường dẫn ảnh");
         formPanel.add(jlbImgLink);
 
-        // image panel
+        
         JPanel imgPanel = new JPanel(new BorderLayout());
         txtImgLink = new JTextField();
         chooseImage();
@@ -132,12 +132,12 @@ public class _TourDiaLog extends JDialog {
         imgPanel.add(jlbPreview, BorderLayout.CENTER);
         formPanel.add(imgPanel);
 
-        // row maDiaDiem
+        
         jlbMaDiaDiem = new JLabel("Mã Địa điểm");
         jlbMaDiaDiem.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbMaDiaDiem);
 
-        // FIX LỖI: Gọi getDs() để đảm bảo danh sách không bị Null
+        
         ArrayList<DiaDiemDTO> lsDiaDiem = DiaDiemBUS.getDs();
         DefaultComboBoxModel<DiaDiemDTO> diaDiemModel = new DefaultComboBoxModel<>();
         if(lsDiaDiem != null){
@@ -154,7 +154,7 @@ public class _TourDiaLog extends JDialog {
         });
         formPanel.add(cbDiaDiem);
 
-        // Kích hoạt event cập nhật text địa điểm lần đầu
+        
         if(cbDiaDiem.getItemCount() > 0) {
             cbDiaDiem.setSelectedIndex(0);
         }
@@ -173,7 +173,7 @@ public class _TourDiaLog extends JDialog {
         txtSoCho.setText(tourDTO.getSoCho() + "");
         txtDiaDiemKhoiHanh.setText(tourDTO.getDiaDiemKhoiHanh());
 
-        //field maLoaiTour
+        
         for(int i = 0; i < cbLoaiTours.getItemCount(); i++){
             _LoaiTourDTO lt = cbLoaiTours.getItemAt(i);
             if(lt.getMaLoaiTour().equalsIgnoreCase(tourDTO.getMaLoaiTour())){
@@ -182,7 +182,7 @@ public class _TourDiaLog extends JDialog {
             }
         }
 
-        //field maDiaDiem
+        
         for(int i = 0; i < cbDiaDiem.getItemCount(); i++){
             DiaDiemDTO dd = cbDiaDiem.getItemAt(i);
             if(dd.getMaDiaDiem().equalsIgnoreCase(tourDTO.getMaDiaDiem())){
@@ -191,7 +191,7 @@ public class _TourDiaLog extends JDialog {
             }
         }
 
-        // load image
+        
         txtImgLink.setText(tourDTO.getImgLink());
         if(tourDTO.getImgLink() != null && !tourDTO.getImgLink().isEmpty()){
             try {
@@ -219,7 +219,7 @@ public class _TourDiaLog extends JDialog {
                 return;
             }
 
-            // Lấy thông tin ComboBox (có check NULL)
+            
             _LoaiTourDTO selectedLoaiTour = (_LoaiTourDTO) cbLoaiTours.getSelectedItem();
             if(selectedLoaiTour == null){
                 JOptionPane.showMessageDialog(this, "Vui lòng chọn Loại Tour");
@@ -231,7 +231,7 @@ public class _TourDiaLog extends JDialog {
                 return;
             }
 
-            //validate numbers
+            
             int soNgay;
             long donGia;
             int soCho;

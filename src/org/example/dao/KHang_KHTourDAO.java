@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package org.example.dao;
 import org.example.dto.*;
 import java.sql.Connection;
@@ -10,10 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-/**
- *
- * @author Admin
- */
+
 public class KHang_KHTourDAO {
     public ArrayList<KHang_KHTourDTO> layDanhSachKHang_KHTour() {
         ArrayList<KHang_KHTourDTO> dsKHang_KHTourDTO = new ArrayList<>();
@@ -163,7 +157,7 @@ public boolean themKHang_KHTour(KHang_KHTourDTO kht) {
     }
 
     public boolean capNhatKHang_KHTour(KHang_KHTourDTO kht) {
-        // Fix: Chỉ cập nhật giá vé dựa trên định danh của cả 2 khóa
+        
         String sql = "UPDATE KHang_KHTour SET GiaVe = ? WHERE MaKHTour = ? AND MaKHang = ?";
         try (Connection conn = _MyConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

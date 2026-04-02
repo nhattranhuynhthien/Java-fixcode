@@ -9,8 +9,8 @@ public class KMTourBUS {
     public static KMTourDAO dao;
     public KMTourBUS() {
         if (dsKMTour == null) {
-            // dao = new DsKMTour();
-            //khoit tao dsKMTour tu database
+            
+            
             dsKMTour = dao.getDsKMTour();
         }
     }
@@ -39,14 +39,14 @@ public class KMTourBUS {
             }
         }
         if(dao.timKMTour(kmTour.getMaKM()) != null) {
-            return true; // Đã tồn tại trong cơ sở dữ liệu
+            return true; 
         }
         return false;
     }
 
     public boolean themKMTour(KMTourDTO kmTour) {
         if (timKMTour(kmTour)) {
-            return false; // Đã tồn tại, không thêm
+            return false; 
         }
         dsKMTour.add(kmTour);
         return true;
@@ -56,29 +56,29 @@ public class KMTourBUS {
         KMTourDTO kmTour = timKMTour(maKM);
         if (kmTour != null) {
             dsKMTour.remove(kmTour);
-            return true; // Xóa thành công
+            return true; 
         }
         if(dao.timKMTour(maKM) != null) {
-            // Xóa từ cơ sở dữ liệu nếu tồn tại
+            
             dao.xoaKMTour(maKM);
-            return true; // Giả sử xóa thành công từ database
+            return true; 
         }   
-        return false; // Không tìm thấy, không xóa
+        return false; 
     }
 
     public boolean suaKMTour(KMTourDTO kmTour) {
         for (int i = 0; i < dsKMTour.size(); i++) {
             if (dsKMTour.get(i).getMaKM().equals(kmTour.getMaKM())) {
                 dsKMTour.set(i, kmTour);
-                return true; // Sửa thành công
+                return true; 
             }
         }
         if(dao.timKMTour(kmTour.getMaKM()) != null) {
-            // Cập nhật trong cơ sở dữ liệu nếu tồn tại
+            
             dao.suaKMTour(kmTour);
-            return true; // Giả sử cập nhật thành công từ database
+            return true; 
         }   
-        return false; // Không tìm thấy, không sửa
+        return false; 
     }
 
 }   

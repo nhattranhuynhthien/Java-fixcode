@@ -9,17 +9,17 @@ import javax.swing.*;
 import java.awt.*;
 
 public class _TourDetailDialog extends JDialog {
-    // label and txt
+    
     private JLabel jlbImage;
     private JTextField txtMaTour, txtTen, txtSoNgay, txtDonGia, txtSoCho, txtDiaDiemKhoiHanh, txtLoaiTour;
 
-    // define btn
+    
     private JButton exitBtn;
 
-    // define relate panel
+    
     private JPanel formPanel;
 
-    // defined tourDTO
+    
     private _TourDTO tourDTO;
     private _LoaiTourBUS loaiTourBUS = new _LoaiTourBUS();
 
@@ -38,14 +38,14 @@ public class _TourDetailDialog extends JDialog {
         setModal(true);
         setLayout(new BorderLayout());
 
-        // use GridBagLayout
+        
         formPanel = new JPanel(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5,10,5,10);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        //row maTour
+        
         int row = 0;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -56,7 +56,7 @@ public class _TourDetailDialog extends JDialog {
         txtMaTour.setEditable(false);
         formPanel.add(txtMaTour, gbc);
 
-        // row ten
+        
         row++;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -67,7 +67,7 @@ public class _TourDetailDialog extends JDialog {
         txtTen.setEditable(false);
         formPanel.add(txtTen, gbc);
 
-        // row soNgay
+        
         row++;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -78,7 +78,7 @@ public class _TourDetailDialog extends JDialog {
         txtSoNgay.setEditable(false);
         formPanel.add(txtSoNgay, gbc);
 
-        // row donGia
+        
         row++;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -89,8 +89,8 @@ public class _TourDetailDialog extends JDialog {
         txtDonGia.setEditable(false);
         formPanel.add(txtDonGia, gbc);
 
-        // .............
-        // row soCho
+        
+        
         row++;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -101,7 +101,7 @@ public class _TourDetailDialog extends JDialog {
         txtSoCho.setEditable(false);
         formPanel.add(txtSoCho, gbc);
 
-        // row ddKhoiHanh
+        
         row++;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -112,7 +112,7 @@ public class _TourDetailDialog extends JDialog {
         txtDiaDiemKhoiHanh.setEditable(false);
         formPanel.add(txtDiaDiemKhoiHanh, gbc);
 
-        // row loaiTour
+        
         row++;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -123,7 +123,7 @@ public class _TourDetailDialog extends JDialog {
         txtLoaiTour.setEditable(false);
         formPanel.add(txtLoaiTour, gbc);
 
-        // row image
+        
         row++;
         gbc.gridx = 0;
         gbc.gridy = row;
@@ -143,7 +143,7 @@ public class _TourDetailDialog extends JDialog {
         formPanel.add(jlbImage, gbc);
         gbc.gridwidth = 1;
 
-        // Exit button
+        
         exit();
         add(formPanel, BorderLayout.CENTER);
         add(exitBtn, BorderLayout.SOUTH);
@@ -154,7 +154,7 @@ public class _TourDetailDialog extends JDialog {
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         return btn;
     }

@@ -158,6 +158,8 @@ public class HoaDonDialog extends JDialog {
         this.bus=new HoaDonBUS();
         this.khtbus=new _KeHoachTourBUS();
         this.khbus =new KhachHangBUS();
+        this.nvbus = new NhanVienBUS();
+        this.cTrinhKMBUS = new CTrinhKMBUS();
         ArrayList<_KeHoachTourDTO> dskht =khtbus.getAllKeHoachTours();
         ArrayList<KhachHangDTO> dskh =KhachHangBUS.dsKH;
         ArrayList<NhanVienDTO> dsnv =NhanVienBUS.dsNV;
@@ -181,7 +183,7 @@ public class HoaDonDialog extends JDialog {
         }
         setupAutoComplete(cbmanv, dsMa);
 
-        // cbKM
+        
         ArrayList<CTrinhKMDTO> lsKM = cTrinhKMBUS.dsCTrinhKM;
         cTrinhKMBUS.docDsCTrinhKM();
         DefaultComboBoxModel<CTrinhKMDTO> khuyenMaiModel = new DefaultComboBoxModel<>();
@@ -190,21 +192,21 @@ public class HoaDonDialog extends JDialog {
         }
         cbKM.setModel(khuyenMaiModel);
 
-        // SỰ KIỆN TÍNH TIỀN: Đã sửa lỗi NumberFormatException
+        
         cbKM.addActionListener(e -> {
             CTrinhKMDTO selected = (CTrinhKMDTO) cbKM.getSelectedItem();
             if(selected != null){
-                // Tránh lỗi NullPointerException khi ComboBox Kế Hoạch Tour chưa được chọn
+                
                 String makht = cbmakht.getSelectedItem() != null ? cbmakht.getSelectedItem().toString().trim() : "";
 
-                // Tránh lỗi NumberFormatException khi người dùng chưa nhập Số Lượng
+                
                 int sl = 0;
                 try {
                     if (!txtsoluong.getText().trim().isEmpty()) {
                         sl = Integer.parseInt(txtsoluong.getText().trim());
                     }
                 } catch (NumberFormatException ex) {
-                    sl = 0; // Nếu nhập sai hoặc để trống, mặc định số lượng = 0
+                    sl = 0; 
                 }
 
                 HoaDonDAO dao = new HoaDonDAO();
@@ -302,7 +304,7 @@ public class HoaDonDialog extends JDialog {
 
         lbsoluong.setText("Số lượng");
 
-        // define handle function
+        
         luu();
         lamMoi();
 
@@ -440,7 +442,7 @@ public class HoaDonDialog extends JDialog {
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         return btn;
     }
@@ -569,15 +571,15 @@ public class HoaDonDialog extends JDialog {
     }
 
     private void txtmahdActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
+        
     }
 
     private void txttongtienFocusLost(FocusEvent evt) {
-        // TODO add your handling code here:
+        
     }
 
     private void txttongtienActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
+        
     }
 
     private void txtsoluongFocusLost(FocusEvent evt) {
@@ -590,7 +592,7 @@ public class HoaDonDialog extends JDialog {
                 float gia=dao.laygia(makht);
 
                 float tong = gia * sl;
-                // áp dụng khuyến mãi
+                
                 String maKm = cbKM.getSelectedItem() != null ? cbKM.getSelectedItem().toString().trim() : "";
                 if(!maKm.isEmpty()){
                     CTrinhKMDTO km = cTrinhKMBUS.getFullCTrinhKM(maKm);
@@ -606,11 +608,11 @@ public class HoaDonDialog extends JDialog {
         }
     }
 
-    private void txtmahdInputMethodTextChanged(InputMethodEvent evt) {//GEN-FIRST:event_txtmahdInputMethodTextChanged
-        // TODO add your handling code here:
+    private void txtmahdInputMethodTextChanged(InputMethodEvent evt) {
+        
     }
 
-    private void cbmakhtActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbmakhtActionPerformed
-        // TODO add your handling code here:
+    private void cbmakhtActionPerformed(ActionEvent evt) {
+        
     }
 }

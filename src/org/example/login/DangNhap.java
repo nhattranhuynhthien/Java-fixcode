@@ -17,16 +17,16 @@ public class DangNhap extends JFrame {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    
     private void initComponents() {
-        // Set favicon
+        
         try {
             ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource("resources/logosgu.png"));
             setIconImage(icon.getImage());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //set title
+        
         setTitle("Đăng Nhập - Library Management System");
 
         jlbAccount = new JLabel();
@@ -37,12 +37,12 @@ public class DangNhap extends JFrame {
         txtPassword = new JPasswordField();
         txtPassword.setEchoChar('*');
 
-        // Header Panel
+        
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 15));
         headerPanel.setBackground(Color.CYAN);
         headerPanel.setPreferredSize(new Dimension(450, 100));
 
-        // Logo
+        
         try {
             ImageIcon originalIcon = new ImageIcon(getClass().getClassLoader().getResource("resources/logosgu.png"));
             Image scaledImage = originalIcon.getImage().getScaledInstance(60, 60, Image.SCALE_SMOOTH);
@@ -52,24 +52,24 @@ public class DangNhap extends JFrame {
             e.printStackTrace();
         }
 
-        // title
+        
         JLabel jlbTitle = new JLabel("TOUR MANAGEMENT SYSTEM");
         jlbTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
         jlbTitle.setForeground(Color.WHITE);
         headerPanel.add(jlbTitle);
 
-        //set close operation
+        
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         jlbAccount.setText("Tài khoản:");
 
         jlbPassword.setText("Mật khẩu:");
 
-        // define login and logout function
+        
         login();
         logout();
 
-        // main Panel
+        
         JPanel mainPanel = new JPanel();
         GroupLayout layout = new GroupLayout(mainPanel);
         mainPanel.setLayout(layout);
@@ -159,7 +159,7 @@ public class DangNhap extends JFrame {
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
 
         btn.setContentAreaFilled(true);
         btn.setOpaque(true);
@@ -167,7 +167,7 @@ public class DangNhap extends JFrame {
         return btn;
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    
     private JButton loginBtn;
     private JButton logoutBtn;
     private JLabel jlbAccount;

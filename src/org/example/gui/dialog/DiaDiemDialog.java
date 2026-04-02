@@ -32,7 +32,7 @@ public class DiaDiemDialog extends JDialog {
 
         this.sua= true;
         this.maDiaDiemCu=dd.getMaDiaDiem();
-        //load data if sua
+        
         txtmadiadiem.setText(dd.getMaDiaDiem());
         txtmadiadiem.setEnabled(false);
         txttendd.setText(dd.getTenDiaDiem());
@@ -76,7 +76,7 @@ public class DiaDiemDialog extends JDialog {
 
         lbDiaChi.setText("Địa chỉ");
 
-        // define handle function
+        
         luu();
         huy();
 
@@ -137,7 +137,7 @@ public class DiaDiemDialog extends JDialog {
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         return btn;
     }
@@ -146,7 +146,7 @@ public class DiaDiemDialog extends JDialog {
         btnluu = createBtn("Lưu", UIColors.SAVE);
         btnluu.addActionListener(v -> {
             try{
-                // them dia diem
+                
                 String maDiaDiem = txtmadiadiem.getText().trim();
                 if(maDiaDiem.isEmpty()){
                     JOptionPane.showMessageDialog(this, "Lỗi");
@@ -166,7 +166,7 @@ public class DiaDiemDialog extends JDialog {
 
                 DiaDiemDTO dd=new DiaDiemDTO(maDiaDiem, ten, diachi, quocgia);
 
-                //sua dia diem
+                
                 if(sua){
                     if(bus.suaDiaDiem(dd,maDiaDiemCu)){
                         JOptionPane.showMessageDialog(this, "Cập nhật thành công");
@@ -202,11 +202,11 @@ public class DiaDiemDialog extends JDialog {
         });
     }
 
-    private void txtquocgiaActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtquocgiaActionPerformed
-        // TODO add your handling code here:
+    private void txtquocgiaActionPerformed(ActionEvent evt) {
+        
     }
 
-    // define variables
+    
     private JButton btnluu, btnHuy;
 
     private JLabel lbMaDiaDiem, lbDiaChi, lbTenDiaDiem, lbTenQuocGia;

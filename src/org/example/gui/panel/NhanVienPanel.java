@@ -4,7 +4,7 @@ import org.example.bus.NhanVienBUS;
 import org.example.dao.NhanVienDAO;
 import org.example.dto.NhanVienDTO;
 import org.example.gui.dialog.NhanVienDialog;
-import org.example.helper.PDFHelper; // Import PDFHelper
+import org.example.helper.PDFHelper; 
 import org.example.login.PhanQuyen;
 
 import java.awt.*;
@@ -61,7 +61,7 @@ public class NhanVienPanel extends JPanel {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    
     private void initComponents() {
 
         jPanel1 = new JPanel();
@@ -77,13 +77,13 @@ public class NhanVienPanel extends JPanel {
         btnXoa = new JButton();
         btnSua = new JButton();
         btnLamMoi = new JButton();
-        btnXuatPDF = new JButton(); // Khai báo nút xuất PDF
+        btnXuatPDF = new JButton(); 
 
         setLayout(new BorderLayout());
 
         jPanel1.setLayout(new BorderLayout());
 
-        jLabel1.setFont(new Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setFont(new Font("Segoe UI", 1, 24)); 
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText("Quản lí nhân viên");
         jLabel1.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -148,12 +148,12 @@ public class NhanVienPanel extends JPanel {
         lamMoi();
         jPanel3.add(btnLamMoi);
 
-        // Gọi hàm khởi tạo nút xuất PDF
+        
         xuatPDF();
         jPanel3.add(btnXuatPDF);
 
         add(jPanel3, BorderLayout.PAGE_END);
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private JButton createBtn(String text, Color color){
         JButton btn = new JButton(text);
@@ -161,7 +161,7 @@ public class NhanVienPanel extends JPanel {
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
 
         btn.setContentAreaFilled(true);
         btn.setOpaque(true);
@@ -244,21 +244,21 @@ public class NhanVienPanel extends JPanel {
         });
     }
 
-    // HÀM MỚI: Khởi tạo sự kiện Xuất PDF
+    
     private void xuatPDF(){
-        btnXuatPDF = createBtn("Xuất PDF", new Color(244, 67, 54)); // Màu đỏ chuẩn UIColors
+        btnXuatPDF = createBtn("Xuất PDF", new Color(244, 67, 54)); 
         btnXuatPDF.addActionListener(v -> {
             PDFHelper.xuatPDF(jTable1, "DANH SÁCH NHÂN VIÊN");
         });
     }
 
-    private void jComboBox1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(ActionEvent evt) {
+        
+    }
 
-    private void txtSearchActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchActionPerformed
+    private void txtSearchActionPerformed(ActionEvent evt) {
+        
+    }
 
     private void jTable1MouseClicked(MouseEvent evt){
         if (PhanQuyen.laQuanLy()) {
@@ -288,7 +288,7 @@ public class NhanVienPanel extends JPanel {
 
     private void loadNhanVienToTable(List<NhanVienDTO> list) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
+        model.setRowCount(0); 
 
         for(NhanVienDTO nv : list){
             Date date = java.sql.Date.valueOf(nv.getNgaySinh());
@@ -310,7 +310,7 @@ public class NhanVienPanel extends JPanel {
         }
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    
     private JButton btnLamMoi, btnSua, btnThem, btnXoa, btnXuatPDF;
 
     private JComboBox<String> jComboBox1;
@@ -325,6 +325,6 @@ public class NhanVienPanel extends JPanel {
 
     private JTextField txtSearch;
 
-    //formatter
+    
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 }

@@ -82,12 +82,12 @@ public class _KeHoachTourBUS {
     }
 
     public boolean removeKeHoachTour(String makhtour){
-        // ====== KIỂM TRA CHẶN XÓA KHI CÓ HÓA ĐƠN (Lỗi 4) ======
+        
         HoaDonBUS hdBus = new HoaDonBUS();
         for (org.example.dto.HoaDonDTO hd : hdBus.docDS()) {
             if (hd.getMaKHTour().equalsIgnoreCase(makhtour)) {
                 JOptionPane.showMessageDialog(null, "Lỗi: Kế hoạch tour này đã có khách hàng đặt vé (Đã lập hóa đơn).\nKHÔNG THỂ XÓA XÓA TRỰC TIẾP!\nBạn chỉ có thể đổi trạng thái hoặc chờ hoàn tất tour.", "Cảnh báo bảo mật", JOptionPane.WARNING_MESSAGE);
-                return false; // Chặn lập tức
+                return false; 
             }
         }
 
@@ -118,10 +118,10 @@ public class _KeHoachTourBUS {
         return false;
     }
     public void loadDSKHTour() {
-        // Phải xóa danh sách cũ trước khi nạp mới
+        
         if (lsKeHoachTour != null) {
             lsKeHoachTour.clear();
         }
-        lsKeHoachTour = keHoachTourDAO.getAllKeHoachTours(); // Gọi DAO để lấy dữ liệu mới từ DB
+        lsKeHoachTour = keHoachTourDAO.getAllKeHoachTours(); 
     }
 }

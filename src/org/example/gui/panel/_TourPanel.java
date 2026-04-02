@@ -4,7 +4,7 @@ import org.example.bus._TourBUS;
 import org.example.dto._TourDTO;
 import org.example.gui.dialog._TourDetailDialog;
 import org.example.gui.dialog._TourDiaLog;
-import org.example.helper.PDFHelper; // Import PDFHelper
+import org.example.helper.PDFHelper; 
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -14,23 +14,23 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class _TourPanel extends JPanel {
-    // text field
+    
     private JTextField txtSearch;
 
-    // define panel
+    
     private JPanel northPanel, southPanel, searchPanel;
 
-    // define button
+    
 
     private JButton addBtn, deleteBtn, editBtn, refreshBtn, detailBtn, xuatPDFBtn;
 
-    // relate to table
+    
     private JTable table;
     private JScrollPane scrollPane;
     private DefaultTableModel tableModel;
     private TableRowSorter<DefaultTableModel> rowSorter;
 
-    // comboBox
+    
     private JComboBox<String> cmbSearchType;
 
     private _TourBUS tourBUS;
@@ -45,17 +45,17 @@ public class _TourPanel extends JPanel {
     private void init(){
         setLayout(new BorderLayout());
 
-        // northPanel
+        
         northPanel = new JPanel(new BorderLayout());
         JLabel jlbTitle = new JLabel("QUẢN LÝ TOUR DU LỊCH", JLabel.CENTER);
         jlbTitle.setFont(new Font("Arial", Font.BOLD, 18));
-        northPanel.add(jlbTitle, BorderLayout.NORTH); // northPanel add components
+        northPanel.add(jlbTitle, BorderLayout.NORTH); 
 
-        // Search panel (define)
+        
         searchPanel = new JPanel(new GridBagLayout());
         searchPanel.setBackground(Color.WHITE);
 
-        // titleBorder
+        
         TitledBorder titleSearch = BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(Color.CYAN, 2), " TÌM KIẾM TOUR "
         );
@@ -67,14 +67,14 @@ public class _TourPanel extends JPanel {
         );
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Khoảng cách giữa các ô
+        gbc.insets = new Insets(10, 10, 10, 10); 
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // column 1 : type label
+        
         gbc.gridx = 0; gbc.gridy = 0;
         searchPanel.add(new JLabel("Loại:"), gbc);
 
-        // column 2 : cmbSearch By Type
+        
         cmbSearchType = new JComboBox<>(new String[]{
                 " Tất cả", " Tên Tour", " Địa điểm khởi hành"
         });
@@ -82,11 +82,11 @@ public class _TourPanel extends JPanel {
         gbc.gridx = 1;
         searchPanel.add(cmbSearchType, gbc);
 
-        // column 3 : keyWord label
+        
         gbc.gridx = 2;
         searchPanel.add(new JLabel("Từ khóa:"), gbc);
 
-        // column 4 : keyWord txtField
+        
         txtSearch = new JTextField(15);
         txtSearch.addCaretListener(e -> searchByType());
         gbc.gridx = 3; gbc.weightx = 1.0;
@@ -94,9 +94,9 @@ public class _TourPanel extends JPanel {
 
         northPanel.add(searchPanel, BorderLayout.CENTER);
 
-        initTable(); // init table
+        initTable(); 
 
-        // southPanel contain buttons
+        
         southPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
         add();
         southPanel.add(addBtn);
@@ -108,7 +108,7 @@ public class _TourPanel extends JPanel {
         southPanel.add(detailBtn);
         refresh();
         southPanel.add(refreshBtn);
-        xuatPDF(); // Khởi tạo và add nút xuất PDF
+        xuatPDF(); 
         southPanel.add(xuatPDFBtn);
 
         add(northPanel, BorderLayout.NORTH);
@@ -117,7 +117,7 @@ public class _TourPanel extends JPanel {
     }
 
     private void initTable(){
-        // columns of table
+        
         String[] columns = {"Mã tour", "Tên", "Số ngày", "Đơn giá", "Số chỗ", "Địa điểm khởi hành", "Mã loại tour", "Mã địa điểm"};
 
         tableModel = new DefaultTableModel(columns, 0);
@@ -163,7 +163,7 @@ public class _TourPanel extends JPanel {
                         case " Địa điểm khởi hành":
                             found = entry.getStringValue(5).toLowerCase().contains(keyWord);
                             break;
-                        default: // Tất cả
+                        default: 
                             for (int i = 0; i < entry.getValueCount(); i++) {
                                 if (entry.getStringValue(i).toLowerCase().contains(keyWord)) {
                                     found = true;
@@ -255,9 +255,9 @@ public class _TourPanel extends JPanel {
         });
     }
 
-    // HÀM MỚI: Khởi tạo sự kiện Xuất PDF
+    
     private void xuatPDF(){
-        xuatPDFBtn = createBtn("Xuất PDF", new Color(244, 67, 54)); // Màu đỏ chuẩn UIColors
+        xuatPDFBtn = createBtn("Xuất PDF", new Color(244, 67, 54)); 
         xuatPDFBtn.addActionListener(e -> {
             PDFHelper.xuatPDF(table, "DANH SÁCH TOUR DU LỊCH");
         });

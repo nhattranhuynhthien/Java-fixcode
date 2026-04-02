@@ -10,7 +10,7 @@ public class _LoaiTourDAO {
     public _LoaiTourDAO(){
     }
 
-    //get all tours
+    
     public ArrayList<_LoaiTourDTO> getAllLoaiTour(){
         ArrayList<_LoaiTourDTO> lsCate = new ArrayList<>();
         try {
@@ -19,12 +19,12 @@ public class _LoaiTourDAO {
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()){
-                // Gọi chính xác tên cột từ database để truyền vào đúng biến của DTO
+                
                 _LoaiTourDTO t = new _LoaiTourDTO(
                         rs.getString("MaLoaiTour"),
                         rs.getString("TheLoai"),
-                        rs.getString("mota"),        // Truyền cho biến moTa (String)
-                        rs.getInt("trangthai")       // Truyền cho biến trangThai (int)
+                        rs.getString("mota"),        
+                        rs.getInt("trangthai")       
                 );
                 lsCate.add(t);
             }
@@ -35,7 +35,7 @@ public class _LoaiTourDAO {
         return lsCate;
     }
 
-    //add
+    
     public boolean addLoaiTour(_LoaiTourDTO t){
         String sql = "INSERT INTO loaitour (MaLoaiTour, TheLoai, trangthai, mota) VALUES (?, ?, ?, ?)";
         try {
@@ -52,7 +52,7 @@ public class _LoaiTourDAO {
         }
     }
 
-    //remove
+    
     public boolean removeLoaiTour(String maLoaiTour){
         try{
             String sql = "DELETE FROM loaitour WHERE maloaitour = ?";
@@ -66,7 +66,7 @@ public class _LoaiTourDAO {
         }
     }
 
-    //edit
+    
     public boolean editLoaiTour(_LoaiTourDTO t){
         String sql = "UPDATE loaitour SET theloai = ?, mota = ?, trangthai = ? WHERE maloaitour = ?";
         try {

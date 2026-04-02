@@ -12,7 +12,7 @@ public class _TourDAO {
         ArrayList<_TourDTO> lsTour = new ArrayList<>();
     }
 
-    //get all tours
+    
     public ArrayList<_TourDTO> getAllTours(){
         ArrayList<_TourDTO> lsTour = new ArrayList<>();
         try {
@@ -40,13 +40,13 @@ public class _TourDAO {
         return lsTour;
     }
 
-    //add
+    
     public boolean addTour(_TourDTO t){
         String sql = "INSERT INTO tour (matour, ten, songay, dongia, socho, ddkhoihanh, imglink, maloaitour, madiadiem) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
-            PreparedStatement pst = c.prepareStatement(sql); // use PreparedStatement
+            PreparedStatement pst = c.prepareStatement(sql); 
 
             pst.setString(1, t.getMaTour());
             pst.setString(2, t.getTen());
@@ -79,7 +79,7 @@ public class _TourDAO {
         }
     }
 
-    // edit
+    
     public boolean editTour(_TourDTO t) {
         String sql = "UPDATE tour SET ten=?, songay=?, dongia=?, socho=?, ddkhoihanh=?, imglink=?, maloaitour=?, madiadiem=? WHERE matour=?";
         try {

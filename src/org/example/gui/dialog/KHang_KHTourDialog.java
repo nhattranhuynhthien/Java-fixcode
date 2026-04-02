@@ -49,7 +49,7 @@ public class KHang_KHTourDialog extends JDialog {
             setDataToFields();
             setTitle("Sửa thông tin khách hàng - kế hoạch tour");
 
-            // Fix: Khóa ô nhập mã để không làm hỏng khóa chính, mở khóa Giá vé
+            
             txtMaKH.setEnabled(false);
             txtMaKHTour.setEnabled(false);
             txtGiaVe.setEnabled(true);
@@ -280,7 +280,7 @@ public class KHang_KHTourDialog extends JDialog {
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
 
@@ -319,20 +319,20 @@ public class KHang_KHTourDialog extends JDialog {
         });
     }
 
-    private void txtMaKHActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaKHActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMaKHActionPerformed
+    private void txtMaKHActionPerformed(java.awt.event.ActionEvent evt) {
+        
+    }
 
-    private void txtMaKHTourActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtMaKHTourActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMaKHTourActionPerformed
+    private void txtMaKHTourActionPerformed(java.awt.event.ActionEvent evt) {
+        
+    }
 
-    private void txtGiaVeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtGiaVeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtGiaVeActionPerformed
+    private void txtGiaVeActionPerformed(java.awt.event.ActionEvent evt) {
+        
+    }
 
-    private void txtMaKHFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMaKHFocusLost
-        // TODO add your handling code here:
+    private void txtMaKHFocusLost(java.awt.event.FocusEvent evt) {
+        
         String ma = txtMaKH.getText().trim();
         for(KhachHangDTO kh : dsKhachHang.layDanhSachKHang()) {
             if(kh.getMaKH().equals(ma)) {
@@ -342,7 +342,7 @@ public class KHang_KHTourDialog extends JDialog {
             }
         }
         JOptionPane.showMessageDialog(KHang_KHTourDialog.this, "Mã khách hàng không tồn tại.", "Lỗi", JOptionPane.ERROR_MESSAGE);
-    }//GEN-LAST:event_txtMaKHFocusLost
+    }
 
     private void txtMaKHTourFocusLost(FocusEvent evt) {
         String maKHTour = txtMaKHTour.getText().trim();
@@ -356,15 +356,15 @@ public class KHang_KHTourDialog extends JDialog {
     }
 
     private void txtHoKHFocusLost(FocusEvent evt) {
-        // TODO add your handling code here:
+        
     }
 
     private void txtTenKHFocusLost(FocusEvent evt) {
-        // TODO add your handling code here:
+        
     }
 
     private void txtGiaVeFocusLost(FocusEvent evt) {
-        // TODO add your handling code here:
+        
     }
 
     private void setDataToFields() {
@@ -375,7 +375,7 @@ public class KHang_KHTourDialog extends JDialog {
         }
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    
     private JButton btnDong;
     private JButton btnLuu;
     private JLabel txtHo;

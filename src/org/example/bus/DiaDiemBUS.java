@@ -88,10 +88,10 @@ public class DiaDiemBUS {
         return dao.getDstheoQuocGia(quocgia.trim());
     }
 
-    // HÀM MỚI: Lấy danh sách Địa Điểm theo Tên Địa Điểm
+    
     public ArrayList<DiaDiemDTO> getDsTheoTenDiaDiem(String tenDiaDiem){
         if(tenDiaDiem == null || tenDiaDiem.trim().isEmpty()){
-            return getDs(); // Trả về toàn bộ danh sách nếu không nhập từ khóa
+            return getDs(); 
         }
         return dao.getDstheoTenDiaDiem(tenDiaDiem.trim());
     }

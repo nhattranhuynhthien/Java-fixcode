@@ -9,7 +9,7 @@ public class _TourBUS {
     private ArrayList<_TourDTO> lsTour;
     private _TourDAO tourDAO;
 
-    //constructor
+    
     public _TourBUS(){
         tourDAO = new _TourDAO();
         lsTour = new ArrayList<>();

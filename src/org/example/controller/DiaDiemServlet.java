@@ -33,7 +33,7 @@ public class DiaDiemServlet extends HttpServlet {
         String action = request.getParameter("action");
         ArrayList<DiaDiemDTO> danhSachDiaDiem;
 
-        // Xử lý tìm kiếm dựa trên các hàm có sẵn trong DiaDiemBUS
+        
         if ("search".equals(action)) {
             String searchType = request.getParameter("searchType");
             String keyword = request.getParameter("keyword");
@@ -70,7 +70,7 @@ public class DiaDiemServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
 
-        // Lấy dữ liệu từ form
+        
         String ma = request.getParameter("maDiaDiem");
         String ten = request.getParameter("tenDiaDiem");
         String diaChi = request.getParameter("diaChi");
@@ -89,7 +89,7 @@ public class DiaDiemServlet extends HttpServlet {
             diaDiemBUS.suaDiaDiem(dd, oldTen);
         }
 
-        // Sau khi xử lý xong, quay lại trang danh sách
+        
         response.sendRedirect(request.getContextPath() + "/DiaDiem");
     }
 }

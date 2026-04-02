@@ -15,7 +15,7 @@ public class CTrinhKMBUS {
     public CTrinhKMBUS() {
         if (dsCTrinhKM == null) {
             dao = new CTrinhKMDAO();
-            //khoit tao dsCTrinhKM tu database
+            
             dsCTrinhKM = dao.getDsCTrinhKM();
         }
     }
@@ -38,10 +38,10 @@ public class CTrinhKMBUS {
     }
 
     public boolean themCTrinhKM(CTrinhKMDTO ct) {
-        // Kiểm tra trùng mã
+        
         if (dao.timCTrinhKM(ct.getMaKM()) != null) return false;
 
-        // Bước 1: Thêm vào bảng CTrinhKM (bảng cha)
+        
         boolean resultCha = dao.themCTrinhKM(ct);
         if (!resultCha) return false;
 
@@ -54,23 +54,23 @@ public class CTrinhKMBUS {
                 KMHDDAO daoKmhd = new KMHDDAO();
                 resultCon = daoKmhd.themKMHD((KMHDDTO) ct);
             } else {
-                // Trường hợp chỉ có CTrinhKM (không có chi tiết)
+                
                 resultCon = true;
             }
 
-            // Nếu thêm chi tiết thất bại (false), rollback thủ công
+            
             if (!resultCon) {
                 dao.xoaCTrinhKM(ct.getMaKM());
                 return false;
             }
         } catch (Exception e) {
-            // Có lỗi phát sinh (ví dụ SQLException), rollback
+            
             dao.xoaCTrinhKM(ct.getMaKM());
             e.printStackTrace();
             return false;
         }
 
-        // Cập nhật danh sách nội bộ
+        
         dsCTrinhKM.add(ct);
         return true;
     }
@@ -80,7 +80,7 @@ public class CTrinhKMBUS {
         if (basic == null) return null;
         if (basic.getHinhThucKM()) {
             KMHDDAO daoHD = new KMHDDAO();
-            return daoHD.timKMHD(maKM);   // Trả về đối tượng KMHD đầy đủ
+            return daoHD.timKMHD(maKM);   
         } else {
             KMTourDAO daoTour = new KMTourDAO();
             return daoTour.timKMTour(maKM);
@@ -121,7 +121,7 @@ public class CTrinhKMBUS {
         }
 
         if (result) {
-            // Cập nhật trong danh sách nội bộ
+            
             for (int i = 0; i < dsCTrinhKM.size(); i++) {
                 if (dsCTrinhKM.get(i).getMaKM().equals(ct.getMaKM())) {
                     dsCTrinhKM.set(i, ct);
@@ -138,7 +138,7 @@ public class CTrinhKMBUS {
                 return ct;
             }
         }
-        return null; // Không tìm thấy
+        return null; 
     }
 
     public ArrayList<CTrinhKMDTO> searchCTrinhKM(String loai, String keyword) {
@@ -171,12 +171,12 @@ public class CTrinhKMBUS {
     }
 
     public void ghiDsCTrinhKM() {
-        // Ghi dsCTrinhKM vào database thông qua DAO
+        
         for (CTrinhKMDTO ct : dsCTrinhKM) {
             if (dao.timCTrinhKM(ct.getMaKM()) != null) {
-                dao.suaCTrinhKM(ct); // Cập nhật nếu đã tồn tại
+                dao.suaCTrinhKM(ct); 
             } else {
-                dao.themCTrinhKM(ct); // Thêm mới nếu chưa tồn tại
+                dao.themCTrinhKM(ct); 
             }
         }
     }

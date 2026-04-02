@@ -136,7 +136,7 @@ public class _CTietKHTourDialog extends JDialog {
                 return;
             }
 
-            // FIX LỖI: Sửa lại đúng tên các txtTienO, txtTienAn, txtTienDiLai
+            
             long tongChi, tienO, tienAn, tienDiLai;
             try {
                 tongChi = Long.parseLong(txtTongChi.getText().trim());

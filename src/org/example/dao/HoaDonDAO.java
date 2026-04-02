@@ -98,7 +98,7 @@ public class HoaDonDAO {
         String sqlct = "Delete from cthoadon where mahd=?";
         String sql="Delete from hoadon where mahd=?";
 
-        // Tự động hoàn lại số vé bị hủy vào Kế hoạch tour
+        
         String sqlHoanVe = "UPDATE kehoachtour SET tongsove = tongsove + ? WHERE makhtour=?";
 
         Connection connection=null;
@@ -348,7 +348,7 @@ public class HoaDonDAO {
         return false;
     }
 
-    // ====== HÀM MỚI: Truy vấn tối ưu bằng GROUP BY ======
+    
     public ArrayList<Object[]> thongKeDoanhThuKH(LocalDate tuNgay, LocalDate denNgay) {
         ArrayList<Object[]> list = new ArrayList<>();
         String sql = "SELECT makhangdat, SUM(tongtien) as tongdoanhthu FROM hoadon WHERE ngay BETWEEN ? AND ? GROUP BY makhangdat";

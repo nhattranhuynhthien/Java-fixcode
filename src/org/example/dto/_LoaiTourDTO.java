@@ -4,13 +4,13 @@ public class _LoaiTourDTO {
     private String maLoaiTour;
     private String theLoai;
     private String moTa;
-    private int trangThai; // 1: Đang hoạt động, 0: Ngưng
+    private int trangThai; 
 
     public _LoaiTourDTO(){
         this.maLoaiTour = "";
         this.theLoai = "";
         this.moTa = "";
-        this.trangThai = 1; // mặc định là đang hoạt đông
+        this.trangThai = 1; 
     }
 
     public _LoaiTourDTO(String maLoaiTour, String theLoai, String moTa, int trangThai) {

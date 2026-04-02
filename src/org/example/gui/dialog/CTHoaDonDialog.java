@@ -1,4 +1,3 @@
-
 package org.example.gui.dialog;
 
 import java.awt.*;
@@ -15,6 +14,7 @@ public class CTHoaDonDialog extends JDialog {
     private CTHoaDonBUS bus;
     private HoaDonBUS hdbus;
     private KhachHangBUS khbus;
+    private String oldMaKH = "";
 
     public CTHoaDonDialog() {
         initComponents();
@@ -27,6 +27,7 @@ public class CTHoaDonDialog extends JDialog {
     public CTHoaDonDialog(CTietHDDTO ct) {
         initComponents();
         loadCbox(ct);
+        this.oldMaKH = ct.getMaKHDi();
         this.setTitle("Chi tiết hóa đơn");
         this.bus=new CTHoaDonBUS();
         this.setLocationRelativeTo(null);
@@ -71,7 +72,6 @@ public class CTHoaDonDialog extends JDialog {
         cbmahd.setSelectedItem(ct.getMaHD());
         cbmakh.setSelectedItem(ct.getMaKHDi());
         txtgiave.setText(String.format("%.0f", bus.layGia(ct.getMaHD())));
-
     }
 
     public void setupAutoComplete(JComboBox<String> cbx, List<String> data) {
@@ -106,37 +106,18 @@ public class CTHoaDonDialog extends JDialog {
         txtgiave.setText("");
     }
 
-    private void txtgiaveActionPerformed(ActionEvent evt) {
-
-    }
-
-    private void btnluuActionPerformed(ActionEvent evt) {
-
-
-    }
-
-    private void txtgiaveFocusLost(FocusEvent evt) {
-        // TODO add your handling code here:
-
-    }
-
-    private void btnresetActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void cbmakhActionPerformed(ActionEvent evt) {
-        // TODO add your handling code here:
-    }
+    private void txtgiaveActionPerformed(ActionEvent evt) {}
+    private void btnluuActionPerformed(ActionEvent evt) {}
+    private void txtgiaveFocusLost(FocusEvent evt) {}
+    private void btnresetActionPerformed(ActionEvent evt) {}
+    private void cbmakhActionPerformed(ActionEvent evt) {}
 
     private void cbmahdFocusLost(FocusEvent evt) {
-        // TODO add your handling code here:
         String mahd =cbmahd.getSelectedItem().toString().trim();
-        System.out.println(mahd);
         txtgiave.setText(String.format("%.0f", bus.layGia(mahd)));
     }
 
     private void cbmahdItemStateChanged(ItemEvent evt) {
-        // TODO add your handling code here:
         String mahd = cbmahd.getSelectedItem().toString().trim();
         txtgiave.setText(String.format("%.0f", bus.layGia(mahd)));
     }
@@ -151,7 +132,6 @@ public class CTHoaDonDialog extends JDialog {
     private JTextField txtgiave;
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
         lbmahd = new JLabel();
         lbmakh = new JLabel();
@@ -165,9 +145,7 @@ public class CTHoaDonDialog extends JDialog {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         lbmahd.setText("Mã hóa đơn");
-
         lbmakh.setText("Mã khách hàng đi");
-
         lbgiave.setText("Giá vé");
 
         txtgiave.setToolTipText("");
@@ -183,7 +161,6 @@ public class CTHoaDonDialog extends JDialog {
             }
         });
 
-        // define handle function
         handleSave();
         handleRefresh();
 
@@ -257,14 +234,14 @@ public class CTHoaDonDialog extends JDialog {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private JButton createBtn(String text, Color color){
         JButton btn = new JButton(text);
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
 
@@ -272,39 +249,41 @@ public class CTHoaDonDialog extends JDialog {
         btnluu = createBtn("Lưu", UIColors.SAVE);
         btnluu.addActionListener(v -> {
             try{
-                String ma=cbmahd.getSelectedItem().toString().trim();
-                String makh=cbmakh.getSelectedItem().toString().trim();
-                if(ma.isEmpty()){
-                    JOptionPane.showMessageDialog(this, "Lỗi chưa nhập mã hóa đơn");
+                String ma = cbmahd.getSelectedItem().toString().trim();
+                String makh = cbmakh.getSelectedItem().toString().trim();
+
+                if(ma.isEmpty() || makh.isEmpty()){
+                    JOptionPane.showMessageDialog(this, "Lỗi: Chưa nhập đủ thông tin mã hóa đơn và khách hàng!");
                     return;
                 }
-                CTietHDDTO cthd=new CTietHDDTO(ma, makh,Float.parseFloat(txtgiave.getText()));
-                CTietHDDTO kt=bus.timCt(ma,cbmahd.getSelectedItem().toString().trim());
 
-                if(kt!=null){
-                    if(bus.suaCtiethd(cthd)){
+                CTietHDDTO cthd = new CTietHDDTO(ma, makh, Float.parseFloat(txtgiave.getText()));
+
+                if (!oldMaKH.isEmpty()) {
+                    if (!oldMaKH.equals(makh) && bus.timCt(ma, makh) != null) {
+                        JOptionPane.showMessageDialog(this, "Khách hàng này đã tồn tại trong hóa đơn!");
+                        return;
+                    }
+
+                    if(bus.suaCtiethd(cthd, oldMaKH)){
                         resetField();
                         JOptionPane.showMessageDialog(this, "Cập nhật chi tiết hóa đơn thành công");
                         this.dispose();
-                    }
-                    else{
+                    } else {
                         JOptionPane.showMessageDialog(this, "Cập nhật thất bại");
-                        return;
                     }
-                }else{
-                    ArrayList<CTietHDDTO> ds=new ArrayList<>();
+                } else {
                     if(bus.themCTietHd(cthd)){
                         resetField();
                         JOptionPane.showMessageDialog(this, "Thêm thành công");
                         this.dispose();
-                    }else{
-                        JOptionPane.showMessageDialog(this, "Thêm thất bại");
-                        return;
+                    } else {
+                        // Alert error is already displayed in BUS
                     }
                 }
             }catch(Exception e){
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(this, "Lỗi");
+                JOptionPane.showMessageDialog(this, "Lỗi dữ liệu đầu vào!");
             }
         });
     }

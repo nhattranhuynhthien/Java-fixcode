@@ -30,12 +30,12 @@ public class NhanVienDialog extends JDialog {
 
 
         initComponents();
-        this.setLocationRelativeTo(null); // set location after init
+        this.setLocationRelativeTo(null); 
 
         if (mode == Mode.EDIT && nv != null) {
             setNhanVienData(nv);
-            txtMaNV.setEditable(false); // Không cho sửa mã NV
-            txtHoNV.requestFocus(); // Chuyển focus đến trường Họ
+            txtMaNV.setEditable(false); 
+            txtHoNV.requestFocus(); 
             setTitle("Sửa nhân viên");
         } else {
             setTitle("Thêm nhân viên");
@@ -85,18 +85,18 @@ public class NhanVienDialog extends JDialog {
                 if (!ma.matches("^NV\\d{3}$")) {
                     JOptionPane.showMessageDialog(null,
                             "Mã nhân viên phải có dạng NVxxx!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 if (ma.isEmpty()) {
                     JOptionPane.showMessageDialog(null,
                             "Mã nhân viên không được để trống!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 for (NhanVienDTO nv : ds.layDanhSachNV()) {
                     if (nv.getMaNV().equals(ma)) {
                         JOptionPane.showMessageDialog(null,
                                 "Mã nhân viên đã tồn tại!");
-                        return false; // Không cho rời field
+                        return false; 
                     }
                 }
                 return true;
@@ -135,12 +135,12 @@ public class NhanVienDialog extends JDialog {
                 if (!ho.matches("^[\\p{L}]+(\\s[\\p{L}]+)*$")) {
                     JOptionPane.showMessageDialog(null,
                             "Họ chỉ được chứa chữ cái và khoảng trắng!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 if (ho.isEmpty()) {
                     JOptionPane.showMessageDialog(null,
                             "Họ không được để trống!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 return true;
             }
@@ -178,12 +178,12 @@ public class NhanVienDialog extends JDialog {
                 if (!ten.matches("^[\\p{L}]+(\\s[\\p{L}]+)*$")) {
                     JOptionPane.showMessageDialog(null,
                             "Tên chỉ được chứa chữ cái và khoảng trắng!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 if (ten.isEmpty()) {
                     JOptionPane.showMessageDialog(null,
                             "Tên không được để trống!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 return true;
             }
@@ -221,12 +221,12 @@ public class NhanVienDialog extends JDialog {
                 if (!chucVu.matches("^[\\p{L}]+(\\s[\\p{L}]+)*$")) {
                     JOptionPane.showMessageDialog(null,
                             "Chức vụ chỉ được chứa chữ cái và khoảng trắng!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 if (chucVu.isEmpty()) {
                     JOptionPane.showMessageDialog(null,
                             "Chức vụ không được để trống!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 return true;
             }
@@ -263,12 +263,12 @@ public class NhanVienDialog extends JDialog {
                 if (jDateChooser1.getDate() == null) {
                     JOptionPane.showMessageDialog(null,
                             "Ngày sinh không được để trống!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 if (jDateChooser1.getDate().after(new java.util.Date())) {
                     JOptionPane.showMessageDialog(null,
                             "Ngày sinh không được lớn hơn ngày hiện tại!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 return true;
             }
@@ -306,12 +306,12 @@ public class NhanVienDialog extends JDialog {
                 if (!sdt.matches("^0\\d{9}$")) {
                     JOptionPane.showMessageDialog(null,
                             "Số điện thoại phải có 10 chữ số và bắt đầu bằng 0!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 if (sdt.isEmpty()) {
                     JOptionPane.showMessageDialog(null,
                             "Số điện thoại không được để trống!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 return true;
             }
@@ -350,12 +350,12 @@ public class NhanVienDialog extends JDialog {
                 if (!diaChi.matches("^[\\p{L}0-9\\s,.-]+$")) {
                     JOptionPane.showMessageDialog(null,
                             "Địa chỉ chỉ được chứa chữ cái, số, khoảng trắng và các ký tự ,.-!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 if (diaChi.isEmpty()) {
                     JOptionPane.showMessageDialog(null,
                             "Địa chỉ không được để trống!");
-                    return false; // Không cho rời field
+                    return false; 
                 }
                 return true;
             }
@@ -382,7 +382,7 @@ public class NhanVienDialog extends JDialog {
                                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
-        // define handle funtion
+        
         luu();
         huy();
 
@@ -431,22 +431,22 @@ public class NhanVienDialog extends JDialog {
         );
 
         pack();
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
-    private void txtSoDienThoaiActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtSoDienThoaiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSoDienThoaiActionPerformed
+    private void txtSoDienThoaiActionPerformed(ActionEvent evt) {
+        
+    }
 
-    private void txtHoNVActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtHoNVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtHoNVActionPerformed
+    private void txtHoNVActionPerformed(ActionEvent evt) {
+        
+    }
 
     private JButton createBtn(String text, Color color){
         JButton btn = new JButton(text);
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
 
@@ -475,7 +475,7 @@ public class NhanVienDialog extends JDialog {
                 nvBUS.suaNhanVien(currentNhanVien);
             }
 
-            dispose(); // đóng dialog sau khi lưu
+            dispose(); 
         });
     }
 
@@ -487,21 +487,21 @@ public class NhanVienDialog extends JDialog {
     }
 
 
-    private void txtChucVuActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtChucVuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtChucVuActionPerformed
+    private void txtChucVuActionPerformed(ActionEvent evt) {
+        
+    }
 
-    private void txtDiaChiActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtDiaChiActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtDiaChiActionPerformed
+    private void txtDiaChiActionPerformed(ActionEvent evt) {
+        
+    }
 
-    private void txtTenNVActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtTenNVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtTenNVActionPerformed
+    private void txtTenNVActionPerformed(ActionEvent evt) {
+        
+    }
 
-    private void txtMaNVActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtMaNVActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtMaNVActionPerformed
+    private void txtMaNVActionPerformed(ActionEvent evt) {
+        
+    }
 
     public void setNhanVienData(NhanVienDTO nv) {
         txtMaNV.setText(nv.getMaNV());

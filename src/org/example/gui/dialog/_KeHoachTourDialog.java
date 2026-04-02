@@ -76,7 +76,7 @@ public class _KeHoachTourDialog extends JDialog {
         txtTongSoVe = new JTextField();
         formPanel.add(txtTongSoVe);
 
-        // KHÔI PHỤC LOGIC: Mặc định là 0 và không cho sửa trực tiếp
+        
         formPanel.add(new JLabel("Tổng chi"));
         txtTongChi = new JTextField("0");
         txtTongChi.setEditable(false);
@@ -114,7 +114,7 @@ public class _KeHoachTourDialog extends JDialog {
 
         txtTongSoVe.setText(String.valueOf(keHoachTourDTO.getTongSoVe()));
 
-        // Đổ dữ liệu cũ khi ở chế độ Sửa
+        
         txtTongChi.setText(String.valueOf(keHoachTourDTO.getTongChi()));
         txtTongThu.setText(String.valueOf(keHoachTourDTO.getTongThu()));
 
@@ -180,7 +180,7 @@ public class _KeHoachTourDialog extends JDialog {
                     keHoachTourDTO.setNgayKetThuc(ngayKetThuc);
                     keHoachTourDTO.setTongSoVe(tongSoVe);
                     keHoachTourDTO.setMaNVHD(selectedStaff.getMaNV());
-                    // Không setTongChi/TongThu ở đây để tránh ghi đè dữ liệu đã tính toán từ DB
+                    
                     if(keHoachTourBUS.editKeHoachTour(keHoachTourDTO)){
                         JOptionPane.showMessageDialog(this, "Đã chỉnh sửa thành công!");
                         dispose();

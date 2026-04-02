@@ -57,7 +57,7 @@ public class KhachHangPanel extends JPanel {
     }
 
     @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    
     private void initComponents() {
 
         jPanel1 = new JPanel();
@@ -78,7 +78,7 @@ public class KhachHangPanel extends JPanel {
 
         jPanel1.setLayout(new BorderLayout());
 
-        jLabel1.setFont(new Font("Segoe UI", 1, 24)); // NOI18N
+        jLabel1.setFont(new Font("Segoe UI", 1, 24)); 
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText("Quản lí khách hàng");
         jLabel1.setHorizontalTextPosition(SwingConstants.CENTER);
@@ -148,7 +148,7 @@ public class KhachHangPanel extends JPanel {
         jPanel3.add(btnLamMoi);
 
         add(jPanel3, BorderLayout.PAGE_END);
-    }// </editor-fold>//GEN-END:initComponents
+    }
 
     private JButton createBtn(String text, Color color){
         JButton btn = new JButton(text);
@@ -156,7 +156,7 @@ public class KhachHangPanel extends JPanel {
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
 
         btn.setContentAreaFilled(true);
         btn.setOpaque(true);
@@ -216,9 +216,9 @@ public class KhachHangPanel extends JPanel {
         });
     }
 
-    private void jComboBox1ActionPerformed(ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    private void jComboBox1ActionPerformed(ActionEvent evt) {
+        
+    }
 
     private void jTable1MouseClicked(MouseEvent evt) {
         if (PhanQuyen.laQuanLy()) {
@@ -247,7 +247,7 @@ public class KhachHangPanel extends JPanel {
 
     private void loadKhachHangToTable(List<KhachHangDTO> list) {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-        model.setRowCount(0); // Xóa dữ liệu cũ trong bảng
+        model.setRowCount(0); 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for(KhachHangDTO kh : list){
@@ -269,7 +269,7 @@ public class KhachHangPanel extends JPanel {
         }
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    
     private JButton btnLamMoi, btnSua, btnThem, btnXoa;
 
     private JComboBox<String> jComboBox1;

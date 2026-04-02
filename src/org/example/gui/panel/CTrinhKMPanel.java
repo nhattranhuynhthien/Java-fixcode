@@ -109,7 +109,7 @@ public class CTrinhKMPanel extends JPanel {
         jPanel1.setPreferredSize(new Dimension(623, 50));
         jPanel1.setLayout(new BorderLayout());
 
-        jLabel1.setFont(new Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel1.setFont(new Font("Segoe UI", 1, 12)); 
         jLabel1.setHorizontalAlignment(SwingConstants.CENTER);
         jLabel1.setText("QUẢN LÝ KHUYẾN MÃI");
         jPanel1.add(jLabel1, BorderLayout.PAGE_START);
@@ -120,21 +120,21 @@ public class CTrinhKMPanel extends JPanel {
         jPanel2.setMinimumSize(new Dimension(230, 35));
         jPanel2.setPreferredSize(new Dimension(100, 45));
 
-        jLabel2.setFont(new Font("Segoe UI", 3, 14)); // NOI18N
+        jLabel2.setFont(new Font("Segoe UI", 3, 14)); 
         jLabel2.setText("Loại");
         jPanel2.add(jLabel2);
 
-        cbbKM.setFont(new Font("Segoe UI", 1, 14)); // NOI18N
+        cbbKM.setFont(new Font("Segoe UI", 1, 14)); 
         cbbKM.setModel(new DefaultComboBoxModel<>(new String[] { "Tất cả", "KMHD", "KMTour" }));
         cbbKM.setToolTipText("");
         cbbKM.setMinimumSize(new Dimension(91, 20));
-        cbbKM.setName(""); // NOI18N
+        cbbKM.setName(""); 
         cbbKM.setPreferredSize(new Dimension(81, 30));
         cbbKM.addActionListener(this::cbbKMActionPerformed);
         jPanel2.add(cbbKM);
         jPanel2.add(filler1);
 
-        jLabel3.setFont(new Font("Segoe UI", 3, 14)); // NOI18N
+        jLabel3.setFont(new Font("Segoe UI", 3, 14)); 
         jLabel3.setText("Từ khóa");
         jPanel2.add(jLabel3);
 
@@ -203,7 +203,7 @@ public class CTrinhKMPanel extends JPanel {
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
         btn.setFont(new Font("SansSerif", Font.BOLD, 13));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // in south panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); 
 
         btn.setContentAreaFilled(true);
         btn.setOpaque(true);
@@ -256,7 +256,7 @@ public class CTrinhKMPanel extends JPanel {
             int row = tblKM.getSelectedRow();
             if (row >= 0) {
                 String maKM = tblKM.getValueAt(row, 0).toString();
-                CTrinhKMDTO ct = bus.getFullCTrinhKM(maKM);  // Lấy chi tiết
+                CTrinhKMDTO ct = bus.getFullCTrinhKM(maKM);  
                 if (ct != null) {
                     CTrinhKMDialog dialog = new CTrinhKMDialog(bus, ct);
                     dialog.setModal(true);
@@ -297,7 +297,7 @@ public class CTrinhKMPanel extends JPanel {
 
                 evt.consume();
 
-                String[] option = {/*"Xem chi tiết",*/ "Chỉnh sửa", "Hủy"};
+                String[] option = { "Chỉnh sửa", "Hủy"};
 
                 int choice = JOptionPane.showOptionDialog(
                         this,
@@ -326,13 +326,13 @@ public class CTrinhKMPanel extends JPanel {
         }
     }
 
-    private void cbbKMActionPerformed(ActionEvent evt) {//GEN-FIRST:event_cbbKMActionPerformed
+    private void cbbKMActionPerformed(ActionEvent evt) {
         String loai =cbbKM.getSelectedItem().toString().trim();
         loadData(loai,"");
-    }//GEN-LAST:event_cbbKMActionPerformed
+    }
 
     private void autoSearch() {
-        // TODO add your handling code here:
+        
         String tim = txtSearch.getText().toString().trim();
         String loai =cbbKM.getSelectedItem().toString().trim();
 
@@ -341,13 +341,13 @@ public class CTrinhKMPanel extends JPanel {
         }else {
             loadData(loai, tim);
         }
-    }//GEN-LAST:event_btnSearchActionPerformed
+    }
 
-    private void txtSearchActionPerformed(ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSearchActionPerformed
+    private void txtSearchActionPerformed(ActionEvent evt) {
+        
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
+    
     private JButton btnAdd, btnDel, btnEdit, btnLoad, btnXuat;
 
     private JComboBox<String> cbbKM;

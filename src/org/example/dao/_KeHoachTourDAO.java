@@ -104,10 +104,10 @@ public class _KeHoachTourDAO {
         }
     }
 
-    // ==============================================================
-    // HÀM MỚI: Dùng để đồng bộ cưỡng chế lại Doanh Thu và Chi Phí
-    // (Tính tổng giá vé từ KHang_KHTour và tổng chi từ CTietKHTour)
-    // ==============================================================
+    
+    
+    
+    
     public boolean capNhatDoanhThuVaChiPhi(String maKHTour) {
         String sqlChi = "UPDATE kehoachtour SET tongchi = COALESCE((SELECT SUM(tongchi) FROM ctietkhtour WHERE makhtour = ?), 0) WHERE makhtour = ?";
         String sqlThu = "UPDATE kehoachtour SET tongthu = COALESCE((SELECT SUM(giave) FROM khang_khtour WHERE makhtour = ?), 0) WHERE makhtour = ?";

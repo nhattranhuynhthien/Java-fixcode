@@ -3,6 +3,7 @@ package org.example.gui.panel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -21,6 +22,9 @@ public class KHang_KHTourPanel extends JPanel {
     KhachHangDAO dsKH = new KhachHangDAO();
     KHang_KHTourBUS khangkhtBUS = new KHang_KHTourBUS();
     KHang_KHTourDialog khangkhtDialog;
+
+    // Khai báo thêm biến cho combobox lọc theo tour
+    private JComboBox<String> cbFilterKHTour;
 
     public KHang_KHTourPanel() {
         khangkhtBUS = new KHang_KHTourBUS();
@@ -65,10 +69,6 @@ public class KHang_KHTourPanel extends JPanel {
         jScrollPane2 = new JScrollPane();
         jTable2 = new JTable();
         jPanel3 = new JPanel();
-        btnThem = new JButton();
-        btnXoa = new JButton();
-        //btnSua = new JButton();
-        btnLamMoi = new JButton();
 
         setLayout(new BorderLayout());
 
@@ -87,8 +87,38 @@ public class KHang_KHTourPanel extends JPanel {
         jComboBox2.addActionListener(this::jComboBox2ActionPerformed);
         jPanel2.add(jComboBox2);
 
-        txtSearch.setPreferredSize(new Dimension(360, 22));
+        txtSearch.setPreferredSize(new Dimension(250, 22)); // Thu nhỏ ô tìm kiếm lại một chút để nhường chỗ cho ô lọc
         jPanel2.add(txtSearch);
+
+        // --- BẮT ĐẦU: THÊM PHẦN LỌC THEO KẾ HOẠCH TOUR ---
+        JLabel lblFilter = new JLabel(" | Lọc theo Tour: ");
+        jPanel2.add(lblFilter);
+
+        cbFilterKHTour = new JComboBox<>();
+        cbFilterKHTour.addItem("Tất cả");
+
+        // Lấy danh sách các mã KHTour duy nhất từ dữ liệu hiện có để đưa vào Combobox
+        List<KHang_KHTourDTO> allItems = ds.layDanhSachKHang_KHTour();
+        List<String> uniqueKHTours = new ArrayList<>();
+        for(KHang_KHTourDTO kht : allItems) {
+            if(!uniqueKHTours.contains(kht.getMaKHTour())) {
+                uniqueKHTours.add(kht.getMaKHTour());
+                cbFilterKHTour.addItem(kht.getMaKHTour());
+            }
+        }
+
+        // Thêm sự kiện khi chọn Combobox thì tiến hành lọc bảng
+        cbFilterKHTour.addActionListener(e -> {
+            String selectedKHTour = cbFilterKHTour.getSelectedItem().toString();
+            if (selectedKHTour.equals("Tất cả")) {
+                loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
+            } else {
+                List<KHang_KHTourDTO> filteredList = khangkhtBUS.timKHang_KHTours("MaKHTour", selectedKHTour);
+                loadKHang_KHTourToTable(filteredList);
+            }
+        });
+        jPanel2.add(cbFilterKHTour);
+        // --- KẾT THÚC: THÊM PHẦN LỌC THEO KẾ HOẠCH TOUR ---
 
         jPanel1.add(jPanel2, BorderLayout.PAGE_END);
 
@@ -118,23 +148,22 @@ public class KHang_KHTourPanel extends JPanel {
         jScrollPane2.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         add(jScrollPane2, BorderLayout.CENTER);
 
+        // Khởi tạo các nút (GỌI ĐÚNG THỨ TỰ ĐỂ TRÁNH NULL POINTER EXCEPTION)
         them();
-        jPanel3.add(btnThem);
-
-        xoa();
-        jPanel3.add(btnXoa);
-
         sua();
-        jPanel3.add(btnSua);
-
+        xoa();
         lamMoi();
+
+        jPanel3.add(btnThem);
+        jPanel3.add(btnXoa);
+        jPanel3.add(btnSua);
         jPanel3.add(btnLamMoi);
 
         add(jPanel3, BorderLayout.PAGE_END);
         jTable2.getSelectionModel().addListSelectionListener(e -> {
             boolean coDongDuocChon = jTable2.getSelectedRow() != -1;
-            btnSua.setEnabled(coDongDuocChon);
-            if (PhanQuyen.laQuanLy()) {
+            if (btnSua != null) btnSua.setEnabled(coDongDuocChon);
+            if (PhanQuyen.laQuanLy() && btnXoa != null) {
                 btnXoa.setEnabled(coDongDuocChon);
             }
         });
@@ -170,7 +199,7 @@ public class KHang_KHTourPanel extends JPanel {
 
     private void xoa(){
         btnXoa = createBtn("Xóa", UIColors.DELETE);
-        btnSua.setEnabled(false);
+        btnXoa.setEnabled(false); // Sửa lỗi NullPointerException: Đã xóa dòng gọi btnSua ở đây
         btnXoa.addActionListener(v -> {
             if (!PhanQuyen.laQuanLy()) {
                 JOptionPane.showMessageDialog(this, "Bạn không có quyền xóa dữ liệu.");
@@ -191,13 +220,13 @@ public class KHang_KHTourPanel extends JPanel {
 
     private void sua(){
         btnSua = createBtn("Sửa", UIColors.EDIT);
+        btnSua.setEnabled(false); // Chuyển việc làm mờ nút Sửa mặc định về đây
         btnSua.addActionListener(v -> {
             int i = jTable2.getSelectedRow();
 
             if (i >= 0) {
                 String maKHang = (String) jTable2.getValueAt(i, 0);
                 String maKHTour = (String) jTable2.getValueAt(i, 3);
-                // Đã thay đổi hàm gọi thành timKiemChinhXac để giải quyết lỗi lấy sai dữ liệu dòng
                 KHang_KHTourDTO khangkht = khangkhtBUS.timKiemChinhXac(maKHTour, maKHang);
                 if (khangkht != null && khangkht.getMaKHang().equals(maKHang)) {
                     khangkhtDialog = new KHang_KHTourDialog(null, true, ds, KHang_KHTourDialog.Mode.EDIT, khangkht);
@@ -213,6 +242,8 @@ public class KHang_KHTourPanel extends JPanel {
         btnLamMoi = createBtn("Làm mới", UIColors.REFRESH);
         btnLamMoi.addActionListener(v -> {
             loadKHang_KHTourToTable(ds.layDanhSachKHang_KHTour());
+            cbFilterKHTour.setSelectedIndex(0); // Reset combobox về "Tất cả"
+            txtSearch.setText(""); // Reset thanh tìm kiếm
         });
     }
 
@@ -271,8 +302,8 @@ public class KHang_KHTourPanel extends JPanel {
     private void hasSelectedRow(){
         jTable2.getSelectionModel().addListSelectionListener(e ->{
             boolean hadSelection = jTable2.getSelectedRow() != -1;
-            btnXoa.setEnabled(hadSelection);
-            btnSua.setEnabled(hadSelection);
+            if(btnXoa != null) btnXoa.setEnabled(hadSelection);
+            if(btnSua != null) btnSua.setEnabled(hadSelection);
         });
     }
 

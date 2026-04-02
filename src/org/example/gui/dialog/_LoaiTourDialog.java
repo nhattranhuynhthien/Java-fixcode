@@ -8,14 +8,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class _LoaiTourDialog extends JDialog{
-    // define label and txt
+    
     private JLabel jlbMaLoaiTour, jlbTheLoai, jlbMoTa, jlbTrangThai;
     private JTextField txtMaLoaiTour, txtTheLoai, txtMoTa, txtTrangThai;
 
-    // define btn
+    
     private JButton saveBtn, cancelBtn;
 
-    // cmb trang thai
+    
     private JComboBox<String> cbTrangThai;
 
     private _LoaiTourDTO loaiTourDTO;
@@ -47,39 +47,39 @@ public class _LoaiTourDialog extends JDialog{
 
         JPanel panelForm = new JPanel(new GridLayout(4, 2, 10, 10));
 
-        // Panel Buttons
+        
         JPanel jpBtn = new JPanel(new FlowLayout());
 
-        // Save button
+        
         save();
         jpBtn.add(saveBtn);
 
-        //Cancel button
+        
         cancel();
         jpBtn.add(cancelBtn);
 
-        //row MaLoai
+        
         jlbMaLoaiTour = new JLabel("Mã loại");
         jlbMaLoaiTour.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         panelForm.add(jlbMaLoaiTour);
         txtMaLoaiTour = new JTextField();
         panelForm.add(txtMaLoaiTour);
 
-        // row the loai
+        
         jlbTheLoai = new JLabel("Thể loại");
         jlbTheLoai.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         panelForm.add(jlbTheLoai);
         txtTheLoai = new JTextField();
         panelForm.add(txtTheLoai);
 
-        // row mo ta
+        
         jlbMoTa = new JLabel("Mô tả");
         jlbMoTa.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         panelForm.add(jlbMoTa);
         txtMoTa = new JTextField();
         panelForm.add(txtMoTa);
 
-        // row trang thai
+        
         jlbTrangThai = new JLabel("Trạng thái");
         jlbTrangThai.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         panelForm.add(jlbTrangThai);
@@ -97,7 +97,7 @@ public class _LoaiTourDialog extends JDialog{
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));// Trong jpBtn panel
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
 
@@ -113,7 +113,7 @@ public class _LoaiTourDialog extends JDialog{
                 if(loaiTourBUS.existedLoaiTourWithID(txtMaLoaiTour.getText()))
                     JOptionPane.showMessageDialog(null, "Mã loại tour đã tồn tại, vui lòng nhập mã khác!");
                 else {
-                    // trang thai
+                    
                     int trangThaiValue = (cbTrangThai.getSelectedIndex() == 0) ? 1 : 0;
 
                     _LoaiTourDTO loaiMoi = new _LoaiTourDTO(txtMaLoaiTour.getText(), txtTheLoai.getText(), txtMoTa.getText(), trangThaiValue);
