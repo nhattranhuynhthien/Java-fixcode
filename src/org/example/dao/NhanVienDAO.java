@@ -140,7 +140,11 @@ public class NhanVienDAO {
             pstmt.setDate(6, Date.valueOf(nv.getNgaySinh()));
             pstmt.setString(7, nv.getMaNV());
 
-            return pstmt.executeUpdate() > 0;
+            boolean result = pstmt.executeUpdate() > 0;
+            if(result) {
+                taiKhoanDAO.capNhatChucVu(nv.getMaNV(), nv.getChucVu());
+            }
+            return result;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -178,7 +182,11 @@ public class NhanVienDAO {
             pstmt.setDate(6, Date.valueOf(nv.getNgaySinh()));
             pstmt.setString(7, nv.getMaNV());
 
-            return pstmt.executeUpdate() > 0;
+            boolean result = pstmt.executeUpdate() > 0;
+            if(result) {
+                taiKhoanDAO.capNhatChucVu(nv.getMaNV(), nv.getChucVu());
+            }
+            return result;
 
         } catch (SQLException e) {
             e.printStackTrace();

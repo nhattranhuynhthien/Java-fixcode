@@ -21,10 +21,33 @@ public class PhanQuyen {
     }
 
     public static boolean laQuanLy() {
-        if (currentTaiKhoan == null || currentTaiKhoan.getPosition() == null) {
-            return false;
+        return getRole() == TaiKhoanDTO.Role.MANAGER;
+    }
+
+    public static TaiKhoanDTO.Role getRole() {
+        if (currentTaiKhoan == null) {
+            return TaiKhoanDTO.Role.STAFF;
         }
-        String chucVu = currentTaiKhoan.getPosition().trim().toLowerCase();
-        return chucVu.equals("quản lí") || chucVu.equals("quan li") || chucVu.equals("quản lý") || chucVu.equals("quan ly");
+
+        TaiKhoanDTO.Role baseRole = currentTaiKhoan.getBaseRole();
+
+        if (baseRole == TaiKhoanDTO.Role.MANAGER) {
+            if (currentTaiKhoan.isUyQuyen()) {
+                return TaiKhoanDTO.Role.STAFF; 
+            } else {
+                return TaiKhoanDTO.Role.MANAGER;
+            }
+        }
+
+        if (baseRole == TaiKhoanDTO.Role.VICE_MANAGER) {
+            org.example.dao.TaiKhoanDAO dao = new org.example.dao.TaiKhoanDAO();
+            if (dao.dangCoQuanLyUyQuyen()) {
+                return TaiKhoanDTO.Role.MANAGER; 
+            } else {
+                return TaiKhoanDTO.Role.VICE_MANAGER;
+            }
+        }
+
+        return TaiKhoanDTO.Role.STAFF;
     }
 }

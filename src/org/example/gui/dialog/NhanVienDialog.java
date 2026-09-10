@@ -461,6 +461,15 @@ public class NhanVienDialog extends JDialog {
             String sdt = txtSoDienThoai.getText().trim();
             String diaChi = txtDiaChi.getText().trim();
 
+            if (chucVu.equalsIgnoreCase("Phó quản lý") || chucVu.equalsIgnoreCase("Phó quản lí") || chucVu.equalsIgnoreCase("Pho quan ly")) {
+                long viceCount = ds.layDanhSachNV().stream().filter(n -> n.getChucVu().equalsIgnoreCase("Phó quản lý") || n.getChucVu().equalsIgnoreCase("Phó quản lí")).count();
+                boolean isCurrentVice = (mode == Mode.EDIT && currentNhanVien != null && (currentNhanVien.getChucVu().equalsIgnoreCase("Phó quản lý") || currentNhanVien.getChucVu().equalsIgnoreCase("Phó quản lí")));
+                if (viceCount >= 1 && !isCurrentVice) {
+                    JOptionPane.showMessageDialog(this, "Chỉ được phép có tối đa 1 Phó quản lý trong cửa hàng!");
+                    return;
+                }
+            }
+
             NhanVienBUS nvBUS = new NhanVienBUS();
             if (mode == Mode.ADD) {
                 NhanVienDTO newNV = new NhanVienDTO(maNV, chucVu, ho, ten, diaChi, sdt, ngaySinh);

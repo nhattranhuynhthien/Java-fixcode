@@ -43,7 +43,8 @@ public class _MainFrame extends JFrame {
 
         
         String[][] menus;
-        if (PhanQuyen.laQuanLy()) {
+        TaiKhoanDTO.Role role = PhanQuyen.getRole();
+        if (role == TaiKhoanDTO.Role.MANAGER) {
             menus = new String[][]{
                     {"Tour", "Tour"},
                     {"Loại Tour", "LoaiTour"},
@@ -56,6 +57,19 @@ public class _MainFrame extends JFrame {
                     {"Chương trình khuyến mãi", "CTrinhKM"},
                     {"Lịch khuyến mãi", "CalendarKM"},
                     {"Thống kê", "ThongKe"},
+            };
+        } else if (role == TaiKhoanDTO.Role.VICE_MANAGER) {
+            menus = new String[][]{
+                    {"Tour", "Tour"},
+                    {"Loại Tour", "LoaiTour"},
+                    {"Kế Hoạch Tour", "KeHoachTour"},
+                    {"Khách hàng - Kế hoạch Tour", "KHang_KHTour"},
+                    {"Hóa đơn", "HoaDon"},
+                    {"Địa điểm", "DiaDiem"},
+                    {"Khách hàng", "KhachHang"},
+                    {"Chương trình khuyến mãi", "CTrinhKM"},
+                    {"Lịch khuyến mãi", "CalendarKM"},
+                    {"Thống kê", "ThongKe"}, 
             };
         } else {
             menus = new String[][]{
@@ -77,6 +91,26 @@ public class _MainFrame extends JFrame {
             sidebar.add(Box.createRigidArea(new Dimension(0, 2)));
         }
         sidebar.add(Box.createVerticalGlue());
+
+        if (PhanQuyen.getCurrentTaiKhoan().getBaseRole() == TaiKhoanDTO.Role.MANAGER) {
+            boolean isLocked = PhanQuyen.getCurrentTaiKhoan().isUyQuyen();
+            String lockText = isLocked ? "Mở Khoá Quyền" : "Khoá Quyền (Uỷ Quyền)";
+            Color lockColor = isLocked ? new Color(255, 140, 0) : new Color(128, 0, 128); 
+            JButton lockBtn = createMenuButton(lockText, null, lockColor);
+            lockBtn.addActionListener(e -> {
+                boolean nextState = !isLocked;
+                org.example.dao.TaiKhoanDAO tkDao = new org.example.dao.TaiKhoanDAO();
+                if (tkDao.capNhatUyQuyen(PhanQuyen.getCurrentTaiKhoan().getUsername(), nextState)) {
+                    PhanQuyen.getCurrentTaiKhoan().setUyQuyen(nextState);
+                    JOptionPane.showMessageDialog(this, nextState ? "Đã khoá quyền và chuyển giao cho Phó quản lý!" : "Đã lấy lại quyền Quản lý!");
+                    
+                    handleLogout();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Lỗi cập nhật!");
+                }
+            });
+            sidebar.add(lockBtn);
+        }
 
         JButton logoutBtn = createMenuButton("Đăng xuất", null, Color.RED);
         logoutBtn.addActionListener(e -> handleLogout());
