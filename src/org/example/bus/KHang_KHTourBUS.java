@@ -37,9 +37,6 @@ public class KHang_KHTourBUS {
                     return;
                 }
             }
-            dataKHKHTour.themKHang_KHTour(kht);
-            if (dsKHKHTour != null) {
-                dsKHKHTour.add(kht);
             if (dataKHKHTour.themKHang_KHTour(kht)) {
                 if (dsKHKHTour != null) {
                     dsKHKHTour.add(kht);
@@ -55,10 +52,6 @@ public class KHang_KHTourBUS {
     public void xoaKHang_KHTour(String maKHTour, String maKHang) {
         try {
             
-            dataKHKHTour.xoaKHang_KHTour(maKHTour, maKHang);
-            
-            if (dsKHKHTour != null) {
-                dsKHKHTour.removeIf(kht -> kht.getMaKHTour().equals(maKHTour) && kht.getMaKHang().equals(maKHang));
             if (dataKHKHTour.xoaKHang_KHTour(maKHTour, maKHang)) {
                 if (dsKHKHTour != null) {
                     dsKHKHTour.removeIf(kht -> kht.getMaKHTour().equals(maKHTour) && kht.getMaKHang().equals(maKHang));
