@@ -171,8 +171,6 @@ public class NhapCTHD extends JDialog {
             boolean loi=false;
             String mahd =model.getValueAt(0, 0).toString().trim();
 
-            bus.capNhatSoluong(soluong, hdbus.timHd(mahd).getMaKHTour());
-
             for(int i = 0; i < soluong; i++){
                 mahd = model.getValueAt(i, 0).toString().trim();
                 String makh = model.getValueAt(i, 1).toString().trim();

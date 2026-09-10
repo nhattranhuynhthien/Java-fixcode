@@ -155,4 +155,21 @@ public class _KeHoachTourBUS {
         }
         lsKeHoachTour = keHoachTourDAO.getAllKeHoachTours(); 
     }
+
+    public String taoMaKHTour() {
+        if (lsKeHoachTour == null || lsKeHoachTour.isEmpty()) {
+            return "KHT01";
+        }
+        int max = 0;
+        for (_KeHoachTourDTO kht : lsKeHoachTour) {
+            String ma = kht.getMaKHTour();
+            if (ma.startsWith("KHT")) {
+                try {
+                    int num = Integer.parseInt(ma.substring(3));
+                    if (num > max) max = num;
+                } catch (Exception e) {}
+            }
+        }
+        return "KHT" + String.format("%02d", max + 1);
+    }
 }

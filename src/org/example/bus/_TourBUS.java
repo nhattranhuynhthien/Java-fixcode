@@ -23,7 +23,6 @@ public class _TourBUS {
     public boolean addTour(_TourDTO t){
         if(t == null) return false;
 
-        if(t.getSoNgay() <= 0 || t.getSoCho() < 0){
         if(t.getSoNgay() <= 0 || t.getSoCho() < 0 || t.getDonGia() < 0){
             return false;
         }
@@ -35,7 +34,6 @@ public class _TourBUS {
     }
 
     public boolean editTour(_TourDTO t){
-        if(t.getSoNgay() <= 0 || t.getSoCho() < 0)
         if(t.getSoNgay() <= 0 || t.getSoCho() < 0 || t.getDonGia() < 0)
             return false;
 
@@ -82,5 +80,22 @@ public class _TourBUS {
                 return true;
         }
         return false;
+    }
+
+    public String taoMaTour() {
+        if (lsTour == null || lsTour.isEmpty()) {
+            return "T01";
+        }
+        int max = 0;
+        for (_TourDTO t : lsTour) {
+            String ma = t.getMaTour();
+            if (ma.startsWith("T")) {
+                try {
+                    int num = Integer.parseInt(ma.substring(1));
+                    if (num > max) max = num;
+                } catch (Exception e) {}
+            }
+        }
+        return "T" + String.format("%02d", max + 1);
     }
 }

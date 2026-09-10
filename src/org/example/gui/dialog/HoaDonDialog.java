@@ -47,6 +47,8 @@ public class HoaDonDialog extends JDialog {
 
         this.setTitle("Hóa đơn");
         this.setLocationRelativeTo(null);
+        txtmahd.setText(bus.taoMaHD());
+        txtmahd.setEnabled(false);
         loadCbox();
         txtmahd.setInputVerifier(new InputVerifier(){
             @Override

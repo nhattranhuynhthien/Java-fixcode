@@ -189,4 +189,19 @@ public class CTrinhKMBUS {
         }
         return null;
     }
+
+    public String taoMaKM() {
+        if (dsCTrinhKM == null || dsCTrinhKM.isEmpty()) return "KM01";
+        int max = 0;
+        for (CTrinhKMDTO km : dsCTrinhKM) {
+            String ma = km.getMaKM();
+            if (ma.startsWith("KM")) {
+                try {
+                    int num = Integer.parseInt(ma.substring(2));
+                    if (num > max) max = num;
+                } catch (Exception e) {}
+            }
+        }
+        return "KM" + String.format("%02d", max + 1);
+    }
 }

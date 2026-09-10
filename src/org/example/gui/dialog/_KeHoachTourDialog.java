@@ -60,6 +60,10 @@ public class _KeHoachTourDialog extends JDialog {
 
         formPanel.add(new JLabel("Mã kế hoạch tour"));
         txtMaKHTour = new JTextField();
+        if (keHoachTourDTO == null) {
+            txtMaKHTour.setText(keHoachTourBUS.taoMaKHTour());
+            txtMaKHTour.setEnabled(false);
+        }
         formPanel.add(txtMaKHTour);
 
         formPanel.add(new JLabel("Ngày khởi hành"));

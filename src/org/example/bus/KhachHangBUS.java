@@ -85,4 +85,20 @@ public class KhachHangBUS {
         }
         return success;
     }
+
+    public String taoMaKH() {
+        if (dsKH == null) docDSKH();
+        if (dsKH.isEmpty()) return "KH01";
+        int max = 0;
+        for (KhachHangDTO kh : dsKH) {
+            String ma = kh.getMaKH();
+            if (ma.startsWith("KH")) {
+                try {
+                    int num = Integer.parseInt(ma.substring(2));
+                    if (num > max) max = num;
+                } catch (Exception e) {}
+            }
+        }
+        return "KH" + String.format("%02d", max + 1);
+    }
 }

@@ -57,6 +57,12 @@ public class KhachHangDialog extends JDialog {
 
         
         txtMaKH = new JTextField();
+        if (mode == Mode.ADD) {
+            KhachHangBUS khachHangBUS = new KhachHangBUS();
+            txtMaKH.setText(khachHangBUS.taoMaKH());
+            txtMaKH.setEnabled(false);
+            txtMaKH.setBackground(new Color(240, 240, 240));
+        }
         txtHoKH = new JTextField();
         txtTenKH = new JTextField();
         jDateChooser1 = new JDateChooser();

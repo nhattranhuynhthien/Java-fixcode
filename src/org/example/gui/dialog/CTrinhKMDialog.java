@@ -88,6 +88,8 @@ public class CTrinhKMDialog extends JDialog {
         card = (CardLayout) pnlSwitch.getLayout();
         this.setTitle("Chương trình khuyến mãi");
         this.setLocationRelativeTo(null);
+        txtMaCTKM.setText(bus.taoMaKM());
+        txtMaCTKM.setEnabled(false);
         txtMaCTKM.setInputVerifier(new InputVerifier() {
             @Override
             public boolean verify(JComponent input) {

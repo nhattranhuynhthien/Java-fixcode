@@ -246,4 +246,19 @@ public class HoaDonBUS {
         if (tuNgay == null || denNgay == null) return new ArrayList<>();
         return dao.thongKeDoanhThuKH(tuNgay, denNgay);
     }
+
+    public String taoMaHD() {
+        if (ds == null || ds.isEmpty()) return "HD001";
+        int max = 0;
+        for (HoaDonDTO hd : ds) {
+            String ma = hd.getMaHD();
+            if (ma.startsWith("HD")) {
+                try {
+                    int num = Integer.parseInt(ma.substring(2));
+                    if (num > max) max = num;
+                } catch (Exception e) {}
+            }
+        }
+        return "HD" + String.format("%03d", max + 1);
+    }
 }

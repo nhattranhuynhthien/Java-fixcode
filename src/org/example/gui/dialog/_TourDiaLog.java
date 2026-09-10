@@ -63,6 +63,10 @@ public class _TourDiaLog extends JDialog {
         jlbMaTour.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 0));
         formPanel.add(jlbMaTour);
         txtMaTour = new JTextField();
+        if (tourDTO == null) {
+            txtMaTour.setText(tourBUS.taoMaTour());
+            txtMaTour.setEnabled(false);
+        }
         formPanel.add(txtMaTour);
 
         
