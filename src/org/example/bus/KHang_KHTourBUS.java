@@ -40,6 +40,12 @@ public class KHang_KHTourBUS {
             dataKHKHTour.themKHang_KHTour(kht);
             if (dsKHKHTour != null) {
                 dsKHKHTour.add(kht);
+            if (dataKHKHTour.themKHang_KHTour(kht)) {
+                if (dsKHKHTour != null) {
+                    dsKHKHTour.add(kht);
+                }
+                org.example.dao._KeHoachTourDAO khDao = new org.example.dao._KeHoachTourDAO();
+                khDao.capNhatSoluong(1, kht.getMaKHTour());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,6 +59,12 @@ public class KHang_KHTourBUS {
             
             if (dsKHKHTour != null) {
                 dsKHKHTour.removeIf(kht -> kht.getMaKHTour().equals(maKHTour) && kht.getMaKHang().equals(maKHang));
+            if (dataKHKHTour.xoaKHang_KHTour(maKHTour, maKHang)) {
+                if (dsKHKHTour != null) {
+                    dsKHKHTour.removeIf(kht -> kht.getMaKHTour().equals(maKHTour) && kht.getMaKHang().equals(maKHang));
+                }
+                org.example.dao._KeHoachTourDAO khDao = new org.example.dao._KeHoachTourDAO();
+                khDao.capNhatSoluong(-1, maKHTour);
             }
         } catch (Exception e) {
             e.printStackTrace();

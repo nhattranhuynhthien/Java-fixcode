@@ -50,6 +50,10 @@ public class _KeHoachTourBUS {
             JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày khởi hành");
             return false;
         }
+        if (!checkLichTrinhNV(t)) {
+            JOptionPane.showMessageDialog(null, "Nhân viên hướng dẫn này đã có lịch trong khoảng thời gian này!");
+            return false;
+        }
 
         boolean success = keHoachTourDAO.addKeHoachTour(t);
 
@@ -68,7 +72,34 @@ public class _KeHoachTourBUS {
         return null;
     }
 
+    public boolean checkLichTrinhNV(_KeHoachTourDTO t) {
+        if (lsKeHoachTour == null) getAllKeHoachTours();
+        for (_KeHoachTourDTO kt : lsKeHoachTour) {
+            if (t.getMaKHTour() != null && t.getMaKHTour().equals(kt.getMaKHTour())) continue;
+            if (kt.getMaNVHD() != null && kt.getMaNVHD().equals(t.getMaNVHD())) {
+                if (!t.getNgayKetThuc().isBefore(kt.getNgayKhoiHanh()) && !t.getNgayKhoiHanh().isAfter(kt.getNgayKetThuc())) {
+                    return false; // Overlap found
+                }
+            }
+        }
+        return true;
+    }
+
     public boolean editKeHoachTour(_KeHoachTourDTO t){
+        if(t == null) return false;
+        if(t.getNgayKhoiHanh() == null || t.getNgayKetThuc() == null) {
+            JOptionPane.showMessageDialog(null, "Ngày không được để trống");
+            return false;
+        }
+        if(t.getNgayKetThuc().isBefore(t.getNgayKhoiHanh())) {
+            JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày khởi hành");
+            return false;
+        }
+        if (!checkLichTrinhNV(t)) {
+            JOptionPane.showMessageDialog(null, "Nhân viên hướng dẫn này đã có lịch trong khoảng thời gian này!");
+            return false;
+        }
+
         boolean success = keHoachTourDAO.editKeHoachTour(t);
         if(success) {
             for (int i = 0; i < lsKeHoachTour.size(); i++) {

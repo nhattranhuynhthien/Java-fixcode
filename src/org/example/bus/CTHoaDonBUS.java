@@ -53,6 +53,14 @@ public class CTHoaDonBUS {
         HoaDonDAO hdDao = new HoaDonDAO();
         HoaDonDTO hd = hdDao.timHoaDon(maHD);
         if (hd != null) {
+            String maKM = hd.getMaKM();
+            if (maKM != null && !maKM.isEmpty()) {
+                CTrinhKMBUS kmBus = new CTrinhKMBUS();
+                org.example.dto.CTrinhKMDTO km = kmBus.getFullCTrinhKM(maKM);
+                if (km != null) {
+                    tongTienMoi = tongTienMoi - (tongTienMoi * km.getChietKhau() / 100);
+                }
+            }
             hd.setTongTien((int) tongTienMoi);
             hdDao.suaHd(hd);
             new HoaDonBUS().docDs();

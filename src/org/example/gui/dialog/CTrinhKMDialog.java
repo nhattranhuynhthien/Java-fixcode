@@ -234,6 +234,7 @@ public class CTrinhKMDialog extends JDialog {
                 }
 
                 if (ngayBD.isBefore(today)) {
+                if (!isEdit && ngayBD.isBefore(today)) {
                     JOptionPane.showMessageDialog(this, "Ngày bắt đầu phải lớn hơn hoặc bằng hôm nay");
                     return;
                 }

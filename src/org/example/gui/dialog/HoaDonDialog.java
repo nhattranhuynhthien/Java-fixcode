@@ -482,11 +482,21 @@ public class HoaDonDialog extends JDialog {
 
                 HoaDonDTO kt = bus.timHd(ma);
                 if (kt != null) {
+                    // --- THÊM ĐOẠN NÀY ĐỂ LẤY NGÀY MỚI TRÊN GIAO DIỆN ---
+                    Date ngaydl = txtngay.getDate();
+                    if (ngaydl == null) {
+                        JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày!");
+                        return;
+                    }
+                    LocalDate ngayMoi = DateHelper.toLocalDateFromUtil(ngaydl);
+                    // ----------------------------------------------------
+
                     HoaDonDTO hd = new HoaDonDTO(
                             ma, makht, makh, manv,
-                            kt.getNgay(),
-                            newSl,maKM, tongTien
+                            ngayMoi, // <--- SỬA LẠI: Truyền biến ngayMoi vào đây
+                            newSl, maKM, tongTien
                     );
+
                     if (bus.suaHoaDon(hd)) {
                         if (newSl > this.soluong) {
                             int canThem = newSl - this.soluong;
@@ -602,6 +612,7 @@ public class HoaDonDialog extends JDialog {
                     }
                 }
                 txttongtien.setText(String.format("%.0f", gia*sl));
+                txttongtien.setText(String.format("%.0f", tong));
             }
         }catch (Exception e){
             txttongtien.setText("0");

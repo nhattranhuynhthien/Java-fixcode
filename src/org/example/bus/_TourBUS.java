@@ -24,6 +24,7 @@ public class _TourBUS {
         if(t == null) return false;
 
         if(t.getSoNgay() <= 0 || t.getSoCho() < 0){
+        if(t.getSoNgay() <= 0 || t.getSoCho() < 0 || t.getDonGia() < 0){
             return false;
         }
 
@@ -35,6 +36,7 @@ public class _TourBUS {
 
     public boolean editTour(_TourDTO t){
         if(t.getSoNgay() <= 0 || t.getSoCho() < 0)
+        if(t.getSoNgay() <= 0 || t.getSoCho() < 0 || t.getDonGia() < 0)
             return false;
 
         return tourDAO.editTour(t);

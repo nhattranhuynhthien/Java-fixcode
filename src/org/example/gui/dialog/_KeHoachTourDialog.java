@@ -166,6 +166,16 @@ public class _KeHoachTourDialog extends JDialog {
                 long tongChi = Long.parseLong(txtTongChi.getText().trim());
                 long tongThu = Long.parseLong(txtTongThu.getText().trim());
 
+                if (tongSoVe < 0 || tongChi < 0 || tongThu < 0) {
+                    JOptionPane.showMessageDialog(this, "Tổng số vé, Tổng chi và Tổng thu phải >= 0");
+                    return;
+                }
+                
+                if (ngayKetThuc.isBefore(ngayKhoiHanh)) {
+                    JOptionPane.showMessageDialog(this, "Ngày kết thúc phải sau hoặc bằng ngày khởi hành");
+                    return;
+                }
+
                 if(keHoachTourDTO == null){
                     _KeHoachTourDTO keHoachTourMoi = new _KeHoachTourDTO(
                             txtMaKHTour.getText().trim(), ngayKhoiHanh, ngayKetThuc,
@@ -174,6 +184,8 @@ public class _KeHoachTourDialog extends JDialog {
                     if(keHoachTourBUS.addKeHoachTour(keHoachTourMoi)) {
                         JOptionPane.showMessageDialog(this, "Đã thêm thành công!");
                         dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Thêm thất bại!");
                     }
                 } else {
                     keHoachTourDTO.setNgayKhoiHanh(ngayKhoiHanh);
@@ -184,6 +196,8 @@ public class _KeHoachTourDialog extends JDialog {
                     if(keHoachTourBUS.editKeHoachTour(keHoachTourDTO)){
                         JOptionPane.showMessageDialog(this, "Đã chỉnh sửa thành công!");
                         dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Chỉnh sửa thất bại!");
                     }
                 }
             } catch (Exception ex) {

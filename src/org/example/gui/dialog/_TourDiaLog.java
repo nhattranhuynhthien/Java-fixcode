@@ -239,6 +239,11 @@ public class _TourDiaLog extends JDialog {
                 soNgay = Integer.parseInt(txtSoNgay.getText().trim());
                 donGia = Long.parseLong(txtDonGia.getText().trim());
                 soCho = Integer.parseInt(txtSoCho.getText().trim());
+                
+                if (soNgay <= 0 || donGia < 0 || soCho < 0) {
+                    JOptionPane.showMessageDialog(this, "Số ngày phải > 0, Đơn giá và Số chỗ phải >= 0");
+                    return;
+                }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số cho Số ngày, Đơn giá và Số chỗ");
                 return;
